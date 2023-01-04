@@ -22,6 +22,7 @@ public struct Go23ActivityDetailModel: Codable {
     @DecodableDefault.EmptyString public var symbol: String
     @DecodableDefault.EmptyString public var gasSymbol: String
     @DecodableDefault.Zero        public var transactionClass: Int
+    @DecodableDefault.EmptyString public var lendingGasFee: String
     
     enum CodingKeys: String, CodingKey {
         case status
@@ -39,5 +40,6 @@ public struct Go23ActivityDetailModel: Codable {
         case symbol
         case gasSymbol = "gas_symbol"
         case transactionClass = "transaction_class"
+        case lendingGasFee = "lending_gas_fee"
     }
 }

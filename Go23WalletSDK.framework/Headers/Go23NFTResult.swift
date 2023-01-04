@@ -1,6 +1,6 @@
 //
 //  Go23NFTResult.swift
-//  demo
+//  Go23WalletSDK
 //
 //  Created by Taran on 2022/12/25.
 //
@@ -8,8 +8,7 @@
 import Foundation
 
 public enum Go23NFTError: Error {
-    case invalidUUID
-    case noUserRecord
+
 }
 
-typealias Go23NFTResult = Result<Any, Go23NFTError>
+typealias Go23NFTResult = Swift.Result<Any, Go23NFTError>

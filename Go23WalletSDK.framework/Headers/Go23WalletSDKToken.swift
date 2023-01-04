@@ -1,12 +1,13 @@
 //
 //  Go23WalletSDKToken.swift
-//  demo
+//  Go23WalletSDK
 //
 //  Created by Taran on 2022/12/20.
 //
 
 import UIKit
 
+// MARK: Token
 extension Go23WalletSDK {
 
     public func getWalletTokenList(with address: String,

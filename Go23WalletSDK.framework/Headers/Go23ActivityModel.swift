@@ -1,6 +1,6 @@
 //
 //  Go23ActivityModel.swift
-//  demo
+//  Go23WalletSDK
 //
 //  Created by Taran on 2022/12/16.
 //
@@ -22,7 +22,7 @@ public struct Go23ActivityModel: Codable {
     @DecodableDefault.Zero        public var status: Int
     @DecodableDefault.EmptyString public var symbol: String
     @DecodableDefault.EmptyString public var transactionType: String
-    @DecodableDefault.ZeroDouble  public var balanceU: Double
+    @DecodableDefault.EmptyString public var balanceU: String
     @DecodableDefault.EmptyString public var walletAddr: String
     
     enum CodingKeys: String, CodingKey {

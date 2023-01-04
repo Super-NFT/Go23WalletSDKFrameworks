@@ -2,98 +2,115 @@
 // swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
 // swift-module-flags: -target x86_64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Go23WalletSDK
 // swift-module-flags-ignorable: -enable-bare-slash-regex
-import Alamofire
-import BigInt
 import Client
 import CommonCrypto
 import Darwin
+import Dispatch
 import Foundation
+import MobileCoreServices
 import Swift
+import SystemConfiguration
 import UIKit
 import _Concurrency
 import _StringProcessing
-public struct Go23ChainTokenModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var contractAddress: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.False public var isSelected: Swift.Bool {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.False public var isPlatform: Swift.Bool {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var chainImageUrl: Swift.String {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
+public struct Timeline {
+  public let requestStartTime: CoreFoundation.CFAbsoluteTime
+  public let initialResponseTime: CoreFoundation.CFAbsoluteTime
+  public let requestCompletedTime: CoreFoundation.CFAbsoluteTime
+  public let serializationCompletedTime: CoreFoundation.CFAbsoluteTime
+  public let latency: Foundation.TimeInterval
+  public let requestDuration: Foundation.TimeInterval
+  public let serializationDuration: Foundation.TimeInterval
+  public let totalDuration: Foundation.TimeInterval
+  public init(requestStartTime: CoreFoundation.CFAbsoluteTime = 0.0, initialResponseTime: CoreFoundation.CFAbsoluteTime = 0.0, requestCompletedTime: CoreFoundation.CFAbsoluteTime = 0.0, serializationCompletedTime: CoreFoundation.CFAbsoluteTime = 0.0)
 }
-public enum Go23WalletError : Swift.Error {
-  case invalidUUID
-  case noUserRecord
-  public static func == (a: Go23WalletSDK.Go23WalletError, b: Go23WalletSDK.Go23WalletError) -> Swift.Bool
-  public func hash(into hasher: inout Swift.Hasher)
-  public var hashValue: Swift.Int {
+extension Go23WalletSDK.Timeline : Swift.CustomStringConvertible {
+  public var description: Swift.String {
     get
   }
 }
-public typealias Go23ShardString = Swift.String
-public enum Go23KeygenError : Swift.Error {
-  case keygenFailed(Swift.String)
-  case invalidAccount(Swift.String)
-  case keyStoreFailed(Swift.String)
+extension Go23WalletSDK.Timeline : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
 }
-public typealias Go23KeygenResult = Swift.Result<Go23WalletSDK.Go23ShardString, Go23WalletSDK.Go23KeygenError>
-public enum Go23RecoverError : Swift.Error {
-  case errorPincode
-  case cancelRecover
-  case forgetPincode
-  case shardLostError
-  case invalidAccount(Swift.String)
+extension Go23WalletSDK.BigUInt {
+  public subscript(bitAt index: Swift.Int) -> Swift.Bool {
+    get
+    set
+  }
 }
-public typealias Go23RecoverResult = Swift.Result<Swift.String, Go23WalletSDK.Go23RecoverError>
-public enum Go23ReshardError : Swift.Error {
-  case errorPincode
-  case cancelReshard
-  case pairShardError
-  case keyStoreFailed
-  case vendorShardLost
-  case forgetPincode
-  case suplierShardLost
-  case keygenShardFailed
-  case invalidAccount(Swift.String)
+extension Go23WalletSDK.BigUInt {
+  public var bitWidth: Swift.Int {
+    get
+  }
+  public var leadingZeroBitCount: Swift.Int {
+    get
+  }
+  public var trailingZeroBitCount: Swift.Int {
+    get
+  }
 }
-public typealias Go23ReshardResult = Swift.Result<Go23WalletSDK.Go23ShardString, Go23WalletSDK.Go23ReshardError>
-public struct Go23WalletChainListModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23WalletChainModel] {
+extension Go23WalletSDK.BigInt {
+  public var bitWidth: Swift.Int {
+    get
+  }
+  public var trailingZeroBitCount: Swift.Int {
+    get
+  }
+}
+extension Go23WalletSDK.BigUInt {
+  public struct Words : Swift.RandomAccessCollection {
+    public var startIndex: Swift.Int {
+      get
+    }
+    public var endIndex: Swift.Int {
+      get
+    }
+    public subscript(index: Swift.Int) -> Go23WalletSDK.BigUInt.Word {
+      get
+    }
+    public typealias Element = Go23WalletSDK.BigUInt.Word
+    public typealias Index = Swift.Int
+    public typealias Indices = Swift.Range<Swift.Int>
+    public typealias Iterator = Swift.IndexingIterator<Go23WalletSDK.BigUInt.Words>
+    public typealias SubSequence = Swift.Slice<Go23WalletSDK.BigUInt.Words>
+  }
+  public var words: Go23WalletSDK.BigUInt.Words {
+    get
+  }
+  public init<Words>(words: Words) where Words : Swift.Sequence, Words.Element == Swift.UInt
+}
+extension Go23WalletSDK.BigInt {
+  public struct Words : Swift.RandomAccessCollection {
+    public typealias Indices = Swift.CountableRange<Swift.Int>
+    public var count: Swift.Int {
+      get
+    }
+    public var indices: Go23WalletSDK.BigInt.Words.Indices {
+      get
+    }
+    public var startIndex: Swift.Int {
+      get
+    }
+    public var endIndex: Swift.Int {
+      get
+    }
+    public subscript(index: Swift.Int) -> Swift.UInt {
+      get
+    }
+    public typealias Element = Swift.UInt
+    public typealias Index = Swift.Int
+    public typealias Iterator = Swift.IndexingIterator<Go23WalletSDK.BigInt.Words>
+    public typealias SubSequence = Swift.Slice<Go23WalletSDK.BigInt.Words>
+  }
+  public var words: Go23WalletSDK.BigInt.Words {
+    get
+  }
+  public init<S>(words: S) where S : Swift.Sequence, S.Element == Swift.UInt
+}
+public struct Go23WalletTokenListModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23WalletTokenModel] {
     get
     set
     _modify
@@ -111,9 +128,858 @@ public struct Go23WalletChainListModel : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
-public struct Go23SendTransactionModel {
+extension Go23WalletSDK.BigUInt {
+  public init?<S>(_ text: S, radix: Swift.Int = 10) where S : Swift.StringProtocol
 }
-public struct Go23NFTDetailModel : Swift.Codable {
+extension Go23WalletSDK.BigInt {
+  public init?<S>(_ text: S, radix: Swift.Int = 10) where S : Swift.StringProtocol
+}
+extension Swift.String {
+  public init(_ v: Go23WalletSDK.BigUInt)
+  public init(_ v: Go23WalletSDK.BigUInt, radix: Swift.Int, uppercase: Swift.Bool = false)
+  public init(_ value: Go23WalletSDK.BigInt, radix: Swift.Int = 10, uppercase: Swift.Bool = false)
+}
+extension Go23WalletSDK.BigUInt : Swift.ExpressibleByStringLiteral {
+  public init(unicodeScalarLiteral value: Swift.UnicodeScalar)
+  public init(extendedGraphemeClusterLiteral value: Swift.String)
+  public init(stringLiteral value: Swift.StringLiteralType)
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias StringLiteralType = Swift.StringLiteralType
+  public typealias UnicodeScalarLiteralType = Swift.UnicodeScalar
+}
+extension Go23WalletSDK.BigInt : Swift.ExpressibleByStringLiteral {
+  public init(unicodeScalarLiteral value: Swift.UnicodeScalar)
+  public init(extendedGraphemeClusterLiteral value: Swift.String)
+  public init(stringLiteral value: Swift.StringLiteralType)
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias StringLiteralType = Swift.StringLiteralType
+  public typealias UnicodeScalarLiteralType = Swift.UnicodeScalar
+}
+extension Go23WalletSDK.BigUInt : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension Go23WalletSDK.BigInt : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension Go23WalletSDK.BigUInt : Swift.CustomPlaygroundDisplayConvertible {
+  public var playgroundDescription: Any {
+    get
+  }
+}
+extension Go23WalletSDK.BigInt : Swift.CustomPlaygroundDisplayConvertible {
+  public var playgroundDescription: Any {
+    get
+  }
+}
+public struct DefaultDataResponse {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let data: Foundation.Data?
+  public let error: Swift.Error?
+  public let timeline: Go23WalletSDK.Timeline
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?, timeline: Go23WalletSDK.Timeline = Timeline(), metrics: Swift.AnyObject? = nil)
+}
+public struct DataResponse<Value> {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let data: Foundation.Data?
+  public let result: Go23WalletSDK.Result<Value>
+  public let timeline: Go23WalletSDK.Timeline
+  public var value: Value? {
+    get
+  }
+  public var error: Swift.Error? {
+    get
+  }
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, result: Go23WalletSDK.Result<Value>, timeline: Go23WalletSDK.Timeline = Timeline())
+}
+extension Go23WalletSDK.DataResponse : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension Go23WalletSDK.DataResponse {
+  public func map<T>(_ transform: (Value) -> T) -> Go23WalletSDK.DataResponse<T>
+  public func flatMap<T>(_ transform: (Value) throws -> T) -> Go23WalletSDK.DataResponse<T>
+  public func mapError<E>(_ transform: (Swift.Error) -> E) -> Go23WalletSDK.DataResponse<Value> where E : Swift.Error
+  public func flatMapError<E>(_ transform: (Swift.Error) throws -> E) -> Go23WalletSDK.DataResponse<Value> where E : Swift.Error
+}
+public struct DefaultDownloadResponse {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let temporaryURL: Foundation.URL?
+  public let destinationURL: Foundation.URL?
+  public let resumeData: Foundation.Data?
+  public let error: Swift.Error?
+  public let timeline: Go23WalletSDK.Timeline
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, temporaryURL: Foundation.URL?, destinationURL: Foundation.URL?, resumeData: Foundation.Data?, error: Swift.Error?, timeline: Go23WalletSDK.Timeline = Timeline(), metrics: Swift.AnyObject? = nil)
+}
+public struct DownloadResponse<Value> {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let temporaryURL: Foundation.URL?
+  public let destinationURL: Foundation.URL?
+  public let resumeData: Foundation.Data?
+  public let result: Go23WalletSDK.Result<Value>
+  public let timeline: Go23WalletSDK.Timeline
+  public var value: Value? {
+    get
+  }
+  public var error: Swift.Error? {
+    get
+  }
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, temporaryURL: Foundation.URL?, destinationURL: Foundation.URL?, resumeData: Foundation.Data?, result: Go23WalletSDK.Result<Value>, timeline: Go23WalletSDK.Timeline = Timeline())
+}
+extension Go23WalletSDK.DownloadResponse : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension Go23WalletSDK.DownloadResponse {
+  public func map<T>(_ transform: (Value) -> T) -> Go23WalletSDK.DownloadResponse<T>
+  public func flatMap<T>(_ transform: (Value) throws -> T) -> Go23WalletSDK.DownloadResponse<T>
+  public func mapError<E>(_ transform: (Swift.Error) -> E) -> Go23WalletSDK.DownloadResponse<Value> where E : Swift.Error
+  public func flatMapError<E>(_ transform: (Swift.Error) throws -> E) -> Go23WalletSDK.DownloadResponse<Value> where E : Swift.Error
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension Go23WalletSDK.DefaultDataResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension Go23WalletSDK.DataResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension Go23WalletSDK.DefaultDownloadResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension Go23WalletSDK.DownloadResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+public struct BigUInt : Swift.UnsignedInteger {
+  public typealias Word = Swift.UInt
+  public init()
+  public init(words: [Go23WalletSDK.BigUInt.Word])
+  public typealias Magnitude = Go23WalletSDK.BigUInt
+}
+extension Go23WalletSDK.BigUInt {
+  public static var isSigned: Swift.Bool {
+    get
+  }
+  public func signum() -> Go23WalletSDK.BigUInt
+}
+public enum AFError : Swift.Error {
+  public enum ParameterEncodingFailureReason {
+    case missingURL
+    case jsonEncodingFailed(error: Swift.Error)
+    case propertyListEncodingFailed(error: Swift.Error)
+  }
+  public enum MultipartEncodingFailureReason {
+    case bodyPartURLInvalid(url: Foundation.URL)
+    case bodyPartFilenameInvalid(in: Foundation.URL)
+    case bodyPartFileNotReachable(at: Foundation.URL)
+    case bodyPartFileNotReachableWithError(atURL: Foundation.URL, error: Swift.Error)
+    case bodyPartFileIsDirectory(at: Foundation.URL)
+    case bodyPartFileSizeNotAvailable(at: Foundation.URL)
+    case bodyPartFileSizeQueryFailedWithError(forURL: Foundation.URL, error: Swift.Error)
+    case bodyPartInputStreamCreationFailed(for: Foundation.URL)
+    case outputStreamCreationFailed(for: Foundation.URL)
+    case outputStreamFileAlreadyExists(at: Foundation.URL)
+    case outputStreamURLInvalid(url: Foundation.URL)
+    case outputStreamWriteFailed(error: Swift.Error)
+    case inputStreamReadFailed(error: Swift.Error)
+  }
+  public enum ResponseValidationFailureReason {
+    case dataFileNil
+    case dataFileReadFailed(at: Foundation.URL)
+    case missingContentType(acceptableContentTypes: [Swift.String])
+    case unacceptableContentType(acceptableContentTypes: [Swift.String], responseContentType: Swift.String)
+    case unacceptableStatusCode(code: Swift.Int)
+  }
+  public enum ResponseSerializationFailureReason {
+    case inputDataNil
+    case inputDataNilOrZeroLength
+    case inputFileNil
+    case inputFileReadFailed(at: Foundation.URL)
+    case stringSerializationFailed(encoding: Swift.String.Encoding)
+    case jsonSerializationFailed(error: Swift.Error)
+    case propertyListSerializationFailed(error: Swift.Error)
+  }
+  case invalidURL(url: Go23WalletSDK.URLConvertible)
+  case parameterEncodingFailed(reason: Go23WalletSDK.AFError.ParameterEncodingFailureReason)
+  case multipartEncodingFailed(reason: Go23WalletSDK.AFError.MultipartEncodingFailureReason)
+  case responseValidationFailed(reason: Go23WalletSDK.AFError.ResponseValidationFailureReason)
+  case responseSerializationFailed(reason: Go23WalletSDK.AFError.ResponseSerializationFailureReason)
+}
+extension Go23WalletSDK.AFError {
+  public var isInvalidURLError: Swift.Bool {
+    get
+  }
+  public var isParameterEncodingError: Swift.Bool {
+    get
+  }
+  public var isMultipartEncodingError: Swift.Bool {
+    get
+  }
+  public var isResponseValidationError: Swift.Bool {
+    get
+  }
+  public var isResponseSerializationError: Swift.Bool {
+    get
+  }
+}
+extension Go23WalletSDK.AFError {
+  public var urlConvertible: Go23WalletSDK.URLConvertible? {
+    get
+  }
+  public var url: Foundation.URL? {
+    get
+  }
+  public var underlyingError: Swift.Error? {
+    get
+  }
+  public var acceptableContentTypes: [Swift.String]? {
+    get
+  }
+  public var responseContentType: Swift.String? {
+    get
+  }
+  public var responseCode: Swift.Int? {
+    get
+  }
+  public var failedStringEncoding: Swift.String.Encoding? {
+    get
+  }
+}
+extension Go23WalletSDK.AFError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension Go23WalletSDK.BigUInt {
+  public func squareRoot() -> Go23WalletSDK.BigUInt
+}
+extension Go23WalletSDK.BigInt {
+  public func squareRoot() -> Go23WalletSDK.BigInt
+}
+extension Go23WalletSDK.Go23WalletSDK {
+  public func getNftList(with walletAddress: Swift.String, chainId: Swift.Int, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23WalletNFTListModel?) -> Swift.Void))
+  public func getNftDetail(for nftid: Swift.String, contractAddress: Swift.String, walletAddress: Swift.String, chainId: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23NFTDetailModel?) -> Swift.Void))
+  public func addNFT(with contractAddress: Swift.String, walletAddress: Swift.String, chainId: Swift.Int, completion: @escaping ((Swift.Bool) -> Swift.Void))
+}
+public struct Go23NFTBaseInfoModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var nftId: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var addr: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var blockChainId: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var chainImageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var url: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+@_specialize(exported: false, kind: full, where T == Swift.Int)
+@_specialize(exported: false, kind: full, where T == Swift.UInt)
+@_specialize(exported: false, kind: full, where T == Swift.UInt8)
+@_specialize(exported: false, kind: full, where T == Swift.UInt16)
+@_specialize(exported: false, kind: full, where T == Swift.UInt32)
+@_specialize(exported: false, kind: full, where T == Swift.UInt64)
+@inlinable internal func arrayOfBytes<T>(value: T, length totalBytes: Swift.Int = MemoryLayout<T>.size) -> Swift.Array<Swift.UInt8> where T : Swift.FixedWidthInteger {
+  let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
+  valuePointer.pointee = value
+
+  let bytesPointer = UnsafeMutablePointer<UInt8>(OpaquePointer(valuePointer))
+  var bytes = Array<UInt8>(repeating: 0, count: totalBytes)
+  for j in 0..<min(MemoryLayout<T>.size, totalBytes) {
+    bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
+  }
+
+  valuePointer.deinitialize(count: 1)
+  valuePointer.deallocate()
+
+  return bytes
+}
+extension Swift.FixedWidthInteger {
+  @inlinable internal func bytes(totalBytes: Swift.Int = MemoryLayout<Self>.size) -> Swift.Array<Swift.UInt8> {
+    arrayOfBytes(value: self.littleEndian, length: totalBytes)
+    // TODO: adjust bytes order
+    // var value = self.littleEndian
+    // return withUnsafeBytes(of: &value, Array.init).reversed()
+  }
+}
+extension Swift.Array {
+  @inlinable internal init(reserveCapacity: Swift.Int) {
+    self = Array<Element>()
+    self.reserveCapacity(reserveCapacity)
+  }
+  @inlinable internal var slice: Swift.ArraySlice<Element> {
+    get {
+    self[self.startIndex ..< self.endIndex]
+  }
+  }
+  @inlinable internal subscript(safe index: Swift.Array<Element>.Index) -> Element? {
+    get {
+    return indices.contains(index) ? self[index] : nil
+  }
+  }
+}
+public struct Go23TokenBalanceModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var balance: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var balanceU: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public enum JsonValue : Swift.Codable {
+  case string(Swift.String)
+  case int(Swift.Int)
+  case uint(Swift.UInt)
+  case int8(Swift.Int8)
+  case uint8(Swift.UInt8)
+  case int16(Swift.Int16)
+  case uint16(Swift.UInt16)
+  case int32(Swift.Int32)
+  case uint32(Swift.UInt32)
+  case int64(Swift.Int64)
+  case uint64(Swift.UInt64)
+  case float(Swift.Float)
+  case double(Swift.Double)
+  case bool(Swift.Bool)
+  case object([Swift.String : Go23WalletSDK.JsonValue])
+  case array([Go23WalletSDK.JsonValue])
+  public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+  public var dictionaryValue: [Swift.String : Go23WalletSDK.JsonValue]? {
+    get
+  }
+  public var arrayValue: [Go23WalletSDK.JsonValue]? {
+    get
+  }
+  public var intValue: Swift.Int {
+    get
+  }
+  public var int8Value: Swift.Int8 {
+    get
+  }
+  public var int16Value: Swift.Int16 {
+    get
+  }
+  public var int32Value: Swift.Int32 {
+    get
+  }
+  public var int64Value: Swift.Int64 {
+    get
+  }
+  public var uintValue: Swift.UInt {
+    get
+  }
+  public var uint8Value: Swift.UInt8 {
+    get
+  }
+  public var uint16Value: Swift.UInt16 {
+    get
+  }
+  public var uint32Value: Swift.UInt32 {
+    get
+  }
+  public var uint64Value: Swift.UInt64 {
+    get
+  }
+  public var floatValue: Swift.Float {
+    get
+  }
+  public var doubleValue: Swift.Double {
+    get
+  }
+  public var boolValue: Swift.Bool {
+    get
+  }
+}
+extension Go23WalletSDK.BigUInt {
+  public mutating func subtractReportingOverflow(_ b: Go23WalletSDK.BigUInt, shiftedBy shift: Swift.Int = 0) -> Swift.Bool
+  public func subtractingReportingOverflow(_ other: Go23WalletSDK.BigUInt, shiftedBy shift: Swift.Int) -> (partialValue: Go23WalletSDK.BigUInt, overflow: Swift.Bool)
+  public func subtractingReportingOverflow(_ other: Go23WalletSDK.BigUInt) -> (partialValue: Go23WalletSDK.BigUInt, overflow: Swift.Bool)
+  public mutating func subtract(_ other: Go23WalletSDK.BigUInt, shiftedBy shift: Swift.Int = 0)
+  public func subtracting(_ other: Go23WalletSDK.BigUInt, shiftedBy shift: Swift.Int = 0) -> Go23WalletSDK.BigUInt
+  public mutating func decrement(shiftedBy shift: Swift.Int = 0)
+  public static func - (a: Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public static func -= (a: inout Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt)
+}
+extension Go23WalletSDK.BigInt {
+  public mutating func negate()
+  public static func - (a: Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func -= (a: inout Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt)
+}
+public protocol Go23Updatable {
+  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool) throws -> Swift.Array<Swift.UInt8>
+  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+}
+extension Go23WalletSDK.Go23Updatable {
+  @inlinable public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
+    let processed = try update(withBytes: bytes, isLast: isLast)
+    if !processed.isEmpty {
+      output(processed)
+    }
+  }
+  @inlinable public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8> {
+    try self.update(withBytes: bytes, isLast: isLast)
+  }
+  @inlinable public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8> {
+    try self.update(withBytes: bytes.slice, isLast: isLast)
+  }
+  @inlinable public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
+    try self.update(withBytes: bytes.slice, isLast: isLast, output: output)
+  }
+  @inlinable public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8> {
+    try self.update(withBytes: bytes, isLast: true)
+  }
+  @inlinable public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8> {
+    try self.finish(withBytes: bytes.slice)
+  }
+  @inlinable public mutating func finish() throws -> Swift.Array<Swift.UInt8> {
+    try self.update(withBytes: [], isLast: true)
+  }
+  @inlinable public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
+    let processed = try update(withBytes: bytes, isLast: true)
+    if !processed.isEmpty {
+      output(processed)
+    }
+  }
+  @inlinable public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
+    try self.finish(withBytes: bytes.slice, output: output)
+  }
+  @inlinable public mutating func finish(output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
+    try self.finish(withBytes: [], output: output)
+  }
+}
+extension Go23WalletSDK.BigUInt : Swift.Comparable {
+  public static func compare(_ a: Go23WalletSDK.BigUInt, _ b: Go23WalletSDK.BigUInt) -> Foundation.ComparisonResult
+  public static func == (a: Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt) -> Swift.Bool
+  public static func < (a: Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt) -> Swift.Bool
+}
+extension Go23WalletSDK.BigInt {
+  public static func == (a: Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt) -> Swift.Bool
+  public static func < (a: Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt) -> Swift.Bool
+}
+@objc @_hasMissingDesignatedInitializers open class TaskDelegate : ObjectiveC.NSObject {
+  final public let queue: Foundation.OperationQueue
+  public var data: Foundation.Data? {
+    get
+  }
+  public var error: Swift.Error?
+  @objc deinit
+}
+extension Go23WalletSDK.BigUInt {
+  public static func randomInteger<RNG>(withMaximumWidth width: Swift.Int, using generator: inout RNG) -> Go23WalletSDK.BigUInt where RNG : Swift.RandomNumberGenerator
+  public static func randomInteger(withMaximumWidth width: Swift.Int) -> Go23WalletSDK.BigUInt
+  public static func randomInteger<RNG>(withExactWidth width: Swift.Int, using generator: inout RNG) -> Go23WalletSDK.BigUInt where RNG : Swift.RandomNumberGenerator
+  public static func randomInteger(withExactWidth width: Swift.Int) -> Go23WalletSDK.BigUInt
+  public static func randomInteger<RNG>(lessThan limit: Go23WalletSDK.BigUInt, using generator: inout RNG) -> Go23WalletSDK.BigUInt where RNG : Swift.RandomNumberGenerator
+  public static func randomInteger(lessThan limit: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+}
+public enum Go23AccountConnectError : Swift.Error {
+  case walletCreateFailed(Swift.String)
+  case networkError(Swift.Int, Swift.String)
+  case accountError(Swift.Int, Swift.String)
+  case walletError(Swift.Int, Swift.String)
+}
+public enum Go23AccountConnectSuccess {
+  case wallets([Go23WalletSDK.Go23WalletInfoModel])
+  case recover([Go23WalletSDK.Go23WalletInfoModel])
+  case walletCreated(Swift.String, Swift.String)
+}
+public typealias Go23AccountResult = Swift.Result<Go23WalletSDK.Go23AccountConnectSuccess, Go23WalletSDK.Go23AccountConnectError>
+extension Go23WalletSDK.BigUInt {
+  public func quotientAndRemainder(dividingBy y: Go23WalletSDK.BigUInt) -> (quotient: Go23WalletSDK.BigUInt, remainder: Go23WalletSDK.BigUInt)
+  public static func / (x: Go23WalletSDK.BigUInt, y: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public static func % (x: Go23WalletSDK.BigUInt, y: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public static func /= (x: inout Go23WalletSDK.BigUInt, y: Go23WalletSDK.BigUInt)
+  public static func %= (x: inout Go23WalletSDK.BigUInt, y: Go23WalletSDK.BigUInt)
+}
+extension Go23WalletSDK.BigInt {
+  public func quotientAndRemainder(dividingBy y: Go23WalletSDK.BigInt) -> (quotient: Go23WalletSDK.BigInt, remainder: Go23WalletSDK.BigInt)
+  public static func / (a: Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func % (a: Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public func modulus(_ mod: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+}
+extension Go23WalletSDK.BigInt {
+  public static func /= (a: inout Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt)
+  public static func %= (a: inout Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt)
+}
+public struct Go23WalletListModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyList public var walletList: [Go23WalletSDK.Go23WalletInfoModel] {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Go23WalletChainModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var walletAddress: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.False public var hasDefault: Swift.Bool {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var rpc: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var middleContractAddress: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension Go23WalletSDK.BigUInt {
+  public init?<T>(exactly source: T) where T : Swift.BinaryFloatingPoint
+  public init<T>(_ source: T) where T : Swift.BinaryFloatingPoint
+}
+extension Go23WalletSDK.BigInt {
+  public init?<T>(exactly source: T) where T : Swift.BinaryFloatingPoint
+  public init<T>(_ source: T) where T : Swift.BinaryFloatingPoint
+}
+extension Swift.BinaryFloatingPoint where Self.RawExponent : Swift.FixedWidthInteger, Self.RawSignificand : Swift.FixedWidthInteger {
+  public init(_ value: Go23WalletSDK.BigInt)
+  public init(_ value: Go23WalletSDK.BigUInt)
+}
+public struct Go23ActivityDetailModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.Zero public var status: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var fromAddr: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var toAddr: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var hash: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var network: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var type: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var amount: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var gasFee: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var image: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var imageName: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var token: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var time: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var gasSymbol: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var transactionClass: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var lendingGasFee: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Go23TokenTransactionModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.False public var isLendingGas: Swift.Bool {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var transType: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var platformBalance: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var platformBalanceSort: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var platformUPer: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var tokenBalance: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var tokenBalanceSort: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var tokenUPer: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var gas: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.ZeroDouble public var fee: Swift.Double {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var decimal: Swift.Int {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers open class NetworkReachabilityManager {
+  public enum NetworkReachabilityStatus {
+    case unknown
+    case notReachable
+    case reachable(Go23WalletSDK.NetworkReachabilityManager.ConnectionType)
+  }
+  public enum ConnectionType {
+    case ethernetOrWiFi
+    case wwan
+    public static func == (a: Go23WalletSDK.NetworkReachabilityManager.ConnectionType, b: Go23WalletSDK.NetworkReachabilityManager.ConnectionType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public typealias Listener = (Go23WalletSDK.NetworkReachabilityManager.NetworkReachabilityStatus) -> Swift.Void
+  open var isReachable: Swift.Bool {
+    get
+  }
+  open var isReachableOnWWAN: Swift.Bool {
+    get
+  }
+  open var isReachableOnEthernetOrWiFi: Swift.Bool {
+    get
+  }
+  open var networkReachabilityStatus: Go23WalletSDK.NetworkReachabilityManager.NetworkReachabilityStatus {
+    get
+  }
+  open var listenerQueue: Dispatch.DispatchQueue
+  open var listener: Go23WalletSDK.NetworkReachabilityManager.Listener?
+  open var flags: SystemConfiguration.SCNetworkReachabilityFlags? {
+    get
+  }
+  open var previousFlags: SystemConfiguration.SCNetworkReachabilityFlags
+  convenience public init?(host: Swift.String)
+  convenience public init?()
+  @objc deinit
+  @discardableResult
+  open func startListening() -> Swift.Bool
+  open func stopListening()
+}
+extension Go23WalletSDK.NetworkReachabilityManager.NetworkReachabilityStatus : Swift.Equatable {
+}
+public func == (lhs: Go23WalletSDK.NetworkReachabilityManager.NetworkReachabilityStatus, rhs: Go23WalletSDK.NetworkReachabilityManager.NetworkReachabilityStatus) -> Swift.Bool
+public enum Result<Value> {
+  case success(Value)
+  case failure(Swift.Error)
+  public var isSuccess: Swift.Bool {
+    get
+  }
+  public var isFailure: Swift.Bool {
+    get
+  }
+  public var value: Value? {
+    get
+  }
+  public var error: Swift.Error? {
+    get
+  }
+}
+extension Go23WalletSDK.Result : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension Go23WalletSDK.Result : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension Go23WalletSDK.Result {
+  public init(value: () throws -> Value)
+  public func unwrap() throws -> Value
+  public func map<T>(_ transform: (Value) -> T) -> Go23WalletSDK.Result<T>
+  public func flatMap<T>(_ transform: (Value) throws -> T) -> Go23WalletSDK.Result<T>
+  public func mapError<T>(_ transform: (Swift.Error) -> T) -> Go23WalletSDK.Result<Value> where T : Swift.Error
+  public func flatMapError<T>(_ transform: (Swift.Error) throws -> T) -> Go23WalletSDK.Result<Value> where T : Swift.Error
+  @discardableResult
+  public func withValue(_ closure: (Value) throws -> Swift.Void) rethrows -> Go23WalletSDK.Result<Value>
+  @discardableResult
+  public func withError(_ closure: (Swift.Error) throws -> Swift.Void) rethrows -> Go23WalletSDK.Result<Value>
+  @discardableResult
+  public func ifSuccess(_ closure: () throws -> Swift.Void) rethrows -> Go23WalletSDK.Result<Value>
+  @discardableResult
+  public func ifFailure(_ closure: () throws -> Swift.Void) rethrows -> Go23WalletSDK.Result<Value>
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class Go23WalletSDK : ObjectiveC.NSObject {
+  public static var shared: Go23WalletSDK.Go23WalletSDK!
+  @objc override dynamic public func copy() -> Any
+  @objc override dynamic public func mutableCopy() -> Any
+  public static func auth(appkey: Swift.String, secretKey: Swift.String, completion: @escaping ((Swift.Bool) -> Swift.Void))
+  @objc deinit
+}
+extension Go23WalletSDK.Go23WalletSDK {
+  public func fetchUserWallet(completion: @escaping ((Go23WalletSDK.Go23AccountResult) -> Swift.Void))
+}
+extension Go23WalletSDK.Go23WalletSDK {
+  public func sendVerifyCode(for type: Go23WalletSDK.Go23VerifyCodeType, completion: @escaping ((Swift.Bool) -> Swift.Void))
+}
+extension Go23WalletSDK.Go23WalletSDK {
+  public func reshardWallet(with address: Swift.String, shard: Swift.String, completion: @escaping ((Go23WalletSDK.Go23ReshardResult) -> Swift.Void))
+  public func forgetShardPincode(with address: Swift.String, shard: Swift.String, verifyCode code: Swift.String, completion: @escaping ((Go23WalletSDK.Go23ReshardResult) -> Swift.Void))
+  public func restoreWallet(with addr: Swift.String, verifyCode code: Swift.String, completion: @escaping ((Go23WalletSDK.Go23RecoverResult) -> Swift.Void))
+}
+extension Go23WalletSDK.Go23WalletSDK {
+  public func fetchWalletChainlist(with address: Swift.String, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23WalletChainListModel?) -> Swift.Void))
+  public func getChainTokenBalance(with address: Swift.String, chainId: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23TokenBalanceModel?) -> Swift.Void))
+  public func addChain(with address: Swift.Int, chainId: Swift.Int, completion: @escaping ((Any?) -> Swift.Void))
+  public func removeChain(with address: Swift.String, chainId: Swift.Int, completion: @escaping ((Any?) -> Swift.Void))
+  public func setCurrentChain(with address: Swift.String, chainId: Swift.Int, completion: @escaping ((Any?) -> Swift.Void))
+}
+public struct Go23WalletNFTModel : Swift.Codable {
   @Go23WalletSDK.DecodableDefault.EmptyString public var tokenId: Swift.String {
     get
     set
@@ -164,39 +1030,11 @@ public struct Go23NFTDetailModel : Swift.Codable {
     set
     _modify
   }
-  @Go23WalletSDK.DecodableDefault.EmptyList public var attributes: [Go23WalletSDK.NFTAttribute] {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var series: Swift.String {
-    get
-    set
-    _modify
-  }
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
-public struct NFTAttribute : Swift.Codable {
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-public struct Go23TokenBalanceModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var balance: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var balanceU: Swift.String {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-public struct Go23ChainTokenListModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23ChainTokenModel] {
+public struct Go23ActivityListModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23ActivityModel] {
     get
     set
     _modify
@@ -215,13 +1053,324 @@ public struct Go23ChainTokenListModel : Swift.Codable {
   public init(from decoder: Swift.Decoder) throws
 }
 public enum Go23TransactionError : Swift.Error {
-  case invalidUUID
-  case noUserRecord
-  public static func == (a: Go23WalletSDK.Go23TransactionError, b: Go23WalletSDK.Go23TransactionError) -> Swift.Bool
-  public func hash(into hasher: inout Swift.Hasher)
-  public var hashValue: Swift.Int {
+}
+open class MultipartFormData {
+  open var contentType: Swift.String {
+    get
+    set
+  }
+  public var contentLength: Swift.UInt64 {
     get
   }
+  public var boundary: Swift.String
+  public init()
+  public func append(_ data: Foundation.Data, withName name: Swift.String)
+  public func append(_ data: Foundation.Data, withName name: Swift.String, mimeType: Swift.String)
+  public func append(_ data: Foundation.Data, withName name: Swift.String, fileName: Swift.String, mimeType: Swift.String)
+  public func append(_ fileURL: Foundation.URL, withName name: Swift.String)
+  public func append(_ fileURL: Foundation.URL, withName name: Swift.String, fileName: Swift.String, mimeType: Swift.String)
+  public func append(_ stream: Foundation.InputStream, withLength length: Swift.UInt64, name: Swift.String, fileName: Swift.String, mimeType: Swift.String)
+  public func append(_ stream: Foundation.InputStream, withLength length: Swift.UInt64, headers: Go23WalletSDK.HTTPHeaders)
+  public func encode() throws -> Foundation.Data
+  public func writeEncodedData(to fileURL: Foundation.URL) throws
+  @objc deinit
+}
+public protocol URLConvertible {
+  func asURL() throws -> Foundation.URL
+}
+extension Swift.String : Go23WalletSDK.URLConvertible {
+  public func asURL() throws -> Foundation.URL
+}
+extension Foundation.URL : Go23WalletSDK.URLConvertible {
+  public func asURL() throws -> Foundation.URL
+}
+extension Foundation.URLComponents : Go23WalletSDK.URLConvertible {
+  public func asURL() throws -> Foundation.URL
+}
+public protocol URLRequestConvertible {
+  func asURLRequest() throws -> Foundation.URLRequest
+}
+extension Go23WalletSDK.URLRequestConvertible {
+  public var urlRequest: Foundation.URLRequest? {
+    get
+  }
+}
+extension Foundation.URLRequest : Go23WalletSDK.URLRequestConvertible {
+  public func asURLRequest() throws -> Foundation.URLRequest
+}
+extension Foundation.URLRequest {
+  public init(url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod, headers: Go23WalletSDK.HTTPHeaders? = nil) throws
+}
+@discardableResult
+public func request(_ url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .get, parameters: Go23WalletSDK.Parameters? = nil, encoding: Go23WalletSDK.ParameterEncoding = URLEncoding.default, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.DataRequest
+@discardableResult
+public func request(_ urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.DataRequest
+@discardableResult
+public func download(_ url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .get, parameters: Go23WalletSDK.Parameters? = nil, encoding: Go23WalletSDK.ParameterEncoding = URLEncoding.default, headers: Go23WalletSDK.HTTPHeaders? = nil, to destination: Go23WalletSDK.DownloadRequest.DownloadFileDestination? = nil) -> Go23WalletSDK.DownloadRequest
+@discardableResult
+public func download(_ urlRequest: Go23WalletSDK.URLRequestConvertible, to destination: Go23WalletSDK.DownloadRequest.DownloadFileDestination? = nil) -> Go23WalletSDK.DownloadRequest
+@discardableResult
+public func download(resumingWith resumeData: Foundation.Data, to destination: Go23WalletSDK.DownloadRequest.DownloadFileDestination? = nil) -> Go23WalletSDK.DownloadRequest
+@discardableResult
+public func upload(_ fileURL: Foundation.URL, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.UploadRequest
+@discardableResult
+public func upload(_ fileURL: Foundation.URL, with urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.UploadRequest
+@discardableResult
+public func upload(_ data: Foundation.Data, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.UploadRequest
+@discardableResult
+public func upload(_ data: Foundation.Data, with urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.UploadRequest
+@discardableResult
+public func upload(_ stream: Foundation.InputStream, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.UploadRequest
+@discardableResult
+public func upload(_ stream: Foundation.InputStream, with urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.UploadRequest
+public func upload(multipartFormData: @escaping (Go23WalletSDK.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil, encodingCompletion: ((Go23WalletSDK.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+public func upload(multipartFormData: @escaping (Go23WalletSDK.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: Go23WalletSDK.URLRequestConvertible, encodingCompletion: ((Go23WalletSDK.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+@discardableResult
+public func stream(withHostName hostName: Swift.String, port: Swift.Int) -> Go23WalletSDK.StreamRequest
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+@discardableResult
+public func stream(with netService: Foundation.NetService) -> Go23WalletSDK.StreamRequest
+extension Go23WalletSDK.BigInt : Swift.Codable {
+  public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+extension Go23WalletSDK.BigUInt : Swift.Codable {
+  public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public struct Go23ChainTokenModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var contractAddress: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.False public var isSelected: Swift.Bool {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.False public var isPlatform: Swift.Bool {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var chainImageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public protocol RequestAdapter {
+  func adapt(_ urlRequest: Foundation.URLRequest) throws -> Foundation.URLRequest
+}
+public typealias RequestRetryCompletion = (_ shouldRetry: Swift.Bool, _ timeDelay: Foundation.TimeInterval) -> Swift.Void
+public protocol RequestRetrier {
+  func should(_ manager: Go23WalletSDK.SessionManager, retry request: Go23WalletSDK.Request, with error: Swift.Error, completion: @escaping Go23WalletSDK.RequestRetryCompletion)
+}
+public typealias HTTPHeaders = [Swift.String : Swift.String]
+@_hasMissingDesignatedInitializers open class Request {
+  public typealias ProgressHandler = (Foundation.Progress) -> Swift.Void
+  open var delegate: Go23WalletSDK.TaskDelegate {
+    get
+  }
+  open var task: Foundation.URLSessionTask? {
+    get
+  }
+  final public let session: Foundation.URLSession
+  open var request: Foundation.URLRequest? {
+    get
+  }
+  open var response: Foundation.HTTPURLResponse? {
+    get
+  }
+  open var retryCount: Swift.UInt {
+    get
+  }
+  @discardableResult
+  open func authenticate(user: Swift.String, password: Swift.String, persistence: Foundation.URLCredential.Persistence = .forSession) -> Self
+  @discardableResult
+  open func authenticate(usingCredential credential: Foundation.URLCredential) -> Self
+  open class func authorizationHeader(user: Swift.String, password: Swift.String) -> (key: Swift.String, value: Swift.String)?
+  open func resume()
+  open func suspend()
+  open func cancel()
+  @objc deinit
+}
+extension Go23WalletSDK.Request : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension Go23WalletSDK.Request : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers open class DataRequest : Go23WalletSDK.Request {
+  override open var request: Foundation.URLRequest? {
+    get
+  }
+  open var progress: Foundation.Progress {
+    get
+  }
+  @discardableResult
+  open func stream(closure: ((Foundation.Data) -> Swift.Void)? = nil) -> Self
+  @discardableResult
+  open func downloadProgress(queue: Dispatch.DispatchQueue = DispatchQueue.main, closure: @escaping Go23WalletSDK.DataRequest.ProgressHandler) -> Self
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers open class DownloadRequest : Go23WalletSDK.Request {
+  public struct DownloadOptions : Swift.OptionSet {
+    public let rawValue: Swift.UInt
+    public static let createIntermediateDirectories: Go23WalletSDK.DownloadRequest.DownloadOptions
+    public static let removePreviousFile: Go23WalletSDK.DownloadRequest.DownloadOptions
+    public init(rawValue: Swift.UInt)
+    public typealias ArrayLiteralElement = Go23WalletSDK.DownloadRequest.DownloadOptions
+    public typealias Element = Go23WalletSDK.DownloadRequest.DownloadOptions
+    public typealias RawValue = Swift.UInt
+  }
+  public typealias DownloadFileDestination = (_ temporaryURL: Foundation.URL, _ response: Foundation.HTTPURLResponse) -> (destinationURL: Foundation.URL, options: Go23WalletSDK.DownloadRequest.DownloadOptions)
+  override open var request: Foundation.URLRequest? {
+    get
+  }
+  open var resumeData: Foundation.Data? {
+    get
+  }
+  open var progress: Foundation.Progress {
+    get
+  }
+  override open func cancel()
+  open func cancel(createResumeData: Swift.Bool)
+  @discardableResult
+  open func downloadProgress(queue: Dispatch.DispatchQueue = DispatchQueue.main, closure: @escaping Go23WalletSDK.DownloadRequest.ProgressHandler) -> Self
+  open class func suggestedDownloadDestination(for directory: Foundation.FileManager.SearchPathDirectory = .documentDirectory, in domain: Foundation.FileManager.SearchPathDomainMask = .userDomainMask) -> Go23WalletSDK.DownloadRequest.DownloadFileDestination
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers open class UploadRequest : Go23WalletSDK.DataRequest {
+  override open var request: Foundation.URLRequest? {
+    get
+  }
+  open var uploadProgress: Foundation.Progress {
+    get
+  }
+  @discardableResult
+  open func uploadProgress(queue: Dispatch.DispatchQueue = DispatchQueue.main, closure: @escaping Go23WalletSDK.UploadRequest.ProgressHandler) -> Self
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+open class StreamRequest : Go23WalletSDK.Request {
+  @objc deinit
+}
+extension Go23WalletSDK.Go23WalletSDK {
+  public func getWalletTokenList(with address: Swift.String, chainId: Swift.Int, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23WalletTokenListModel?) -> Swift.Void))
+  public func getChainTokenList(with chainId: Swift.Int, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23ChainTokenListModel?) -> Swift.Void))
+  public func getTokenBalance(for tokenAddress: Swift.String, walletAddress: Swift.String, chainId: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23TokenBalanceModel?) -> Swift.Void))
+  public func getTokenDetail(for chainId: Swift.Int, tokenAddress: Swift.String, completion: @escaping ((Go23WalletSDK.Go23TokenDetailModel?) -> Swift.Void))
+  public func checkToken(with address: Swift.String, chainid: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23ChainTokenInfoModel?) -> Swift.Void))
+  public func addToken(with chainId: Swift.Int, walletAddress: Swift.String, contractAddress: Swift.String, completion: @escaping ((Swift.Bool) -> Swift.Void))
+  public func hideToken(with chainId: Swift.Int, walletAddress: Swift.String, contractAddress: Swift.String, completion: @escaping ((Swift.Bool) -> Swift.Void))
+}
+public struct Go23NFTTransactionModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.False public var isOk: Swift.Bool {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var gas: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension Go23WalletSDK.BigUInt {
+  prefix public static func ~ (a: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public static func |= (a: inout Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt)
+  public static func &= (a: inout Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt)
+  public static func ^= (a: inout Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt)
+}
+extension Go23WalletSDK.BigInt {
+  prefix public static func ~ (x: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func & (lhs: inout Go23WalletSDK.BigInt, rhs: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func | (lhs: inout Go23WalletSDK.BigInt, rhs: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func ^ (lhs: inout Go23WalletSDK.BigInt, rhs: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func &= (lhs: inout Go23WalletSDK.BigInt, rhs: Go23WalletSDK.BigInt)
+  public static func |= (lhs: inout Go23WalletSDK.BigInt, rhs: Go23WalletSDK.BigInt)
+  public static func ^= (lhs: inout Go23WalletSDK.BigInt, rhs: Go23WalletSDK.BigInt)
+}
+public typealias Go23ShardString = Swift.String
+public enum Go23RecoverError : Swift.Error {
+  case errorPincode
+  case cancelRecover
+  case forgetPincode
+  case shardLostError
+  case invalidAccount(Swift.String)
+}
+public typealias Go23RecoverResult = Swift.Result<Swift.String, Go23WalletSDK.Go23RecoverError>
+public enum Go23ReshardError : Swift.Error {
+  case shardLost
+  case errorPincode
+  case forgetPincode
+  case cancelReshard
+  case reshardFailed
+  case networkError(Swift.String)
+  case invalidAccount(Swift.String)
+}
+public typealias Go23ReshardResult = Swift.Result<Go23WalletSDK.Go23ShardString, Go23WalletSDK.Go23ReshardError>
+public struct Go23WalletChainListModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23WalletChainModel] {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var page: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var pageSize: Swift.Int {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public enum Go23VerifyCodeType {
+  case email(Swift.String)
+}
+public struct Go23AccountModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var uuid: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
 }
 @usableFromInline
 internal struct Go23BatchedCollectionIndex<Base> where Base : Swift.Collection {
@@ -266,232 +1415,183 @@ extension Swift.Collection {
     Go23BatchedCollection(base: self, size: size)
   }
 }
-public enum Go23NFTError : Swift.Error {
-  case invalidUUID
-  case noUserRecord
-  public static func == (a: Go23WalletSDK.Go23NFTError, b: Go23WalletSDK.Go23NFTError) -> Swift.Bool
-  public func hash(into hasher: inout Swift.Hasher)
-  public var hashValue: Swift.Int {
+extension Swift.Encodable {
+  public var jsonString: Swift.String? {
+    get
+  }
+  public var jsonObject: Any? {
     get
   }
 }
-public struct Go23TransactionGasModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var suggestGas: Swift.String {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
+extension Swift.Decodable {
+  @inline(__always) public static func decodeJSON(from string: Swift.String?, designatedPath: Swift.String? = nil) -> Self?
+  @inline(__always) public static func decodeJSON(from jsonObject: Any?, designatedPath: Swift.String? = nil) -> Self?
+  @inline(__always) public static func decodeJSON(from data: Foundation.Data?, designatedPath: Swift.String? = nil) -> Self?
 }
-public enum Go23ActivityFilterType : Swift.String {
-  case all
-  case outcome
-  case fail
-  case income
-  public init?(rawValue: Swift.String)
-  public typealias RawValue = Swift.String
-  public var rawValue: Swift.String {
-    get
-  }
+extension Swift.Array where Element : Swift.Decodable, Element : Swift.Encodable {
+  public static func decodeJSON(from jsonString: Swift.String?, designatedPath: Swift.String? = nil) -> [Element]?
+  public static func decodeJSON(from array: [Any]?) -> [Element]?
 }
-public protocol DecodableDefaultSource {
-  associatedtype Value : Swift.Decodable
-  static var defaultValue: Self.Value { get }
+public protocol DataResponseSerializerProtocol {
+  associatedtype SerializedObject
+  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, Swift.Error?) -> Go23WalletSDK.Result<Self.SerializedObject> { get }
 }
-public enum DecodableDefault {
+public struct DataResponseSerializer<Value> : Go23WalletSDK.DataResponseSerializerProtocol {
+  public typealias SerializedObject = Value
+  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, Swift.Error?) -> Go23WalletSDK.Result<Value>
+  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, Swift.Error?) -> Go23WalletSDK.Result<Value>)
 }
-extension Go23WalletSDK.DecodableDefault {
-  @propertyWrapper public struct Wrapper<Source> where Source : Go23WalletSDK.DecodableDefaultSource {
-    public typealias Value = Source.Value
-    public var wrappedValue: Source.Value
-    public init(wrappedValue: Go23WalletSDK.DecodableDefault.Wrapper<Source>.Value)
-  }
+public protocol DownloadResponseSerializerProtocol {
+  associatedtype SerializedObject
+  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, Swift.Error?) -> Go23WalletSDK.Result<Self.SerializedObject> { get }
 }
-extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Decodable {
-  public init(from decoder: Swift.Decoder) throws
+public struct DownloadResponseSerializer<Value> : Go23WalletSDK.DownloadResponseSerializerProtocol {
+  public typealias SerializedObject = Value
+  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, Swift.Error?) -> Go23WalletSDK.Result<Value>
+  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, Swift.Error?) -> Go23WalletSDK.Result<Value>)
 }
-extension Swift.KeyedDecodingContainer {
-  public func decode<T>(_ type: Go23WalletSDK.DecodableDefault.Wrapper<T>.Type, forKey key: Swift.KeyedDecodingContainer<K>.Key) throws -> Go23WalletSDK.DecodableDefault.Wrapper<T> where T : Go23WalletSDK.DecodableDefaultSource
+extension Go23WalletSDK.DataRequest {
+  @discardableResult
+  public func response(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (Go23WalletSDK.DefaultDataResponse) -> Swift.Void) -> Self
+  @discardableResult
+  public func response<T>(queue: Dispatch.DispatchQueue? = nil, responseSerializer: T, completionHandler: @escaping (Go23WalletSDK.DataResponse<T.SerializedObject>) -> Swift.Void) -> Self where T : Go23WalletSDK.DataResponseSerializerProtocol
 }
-extension Go23WalletSDK.DecodableDefault {
-  public typealias Source = Go23WalletSDK.DecodableDefaultSource
-  public typealias List = Swift.Decodable & Swift.ExpressibleByArrayLiteral
-  public typealias Map = Swift.Decodable & Swift.ExpressibleByDictionaryLiteral
-  public enum Sources {
-    public enum True : Go23WalletSDK.DecodableDefault.Source {
-      public static var defaultValue: Swift.Bool {
-        get
-      }
-      public typealias Value = Swift.Bool
-    }
-    public enum False : Go23WalletSDK.DecodableDefault.Source {
-      public static var defaultValue: Swift.Bool {
-        get
-      }
-      public typealias Value = Swift.Bool
-    }
-    public enum EmptyString : Go23WalletSDK.DecodableDefault.Source {
-      public static var defaultValue: Swift.String {
-        get
-      }
-      public typealias Value = Swift.String
-    }
-    public enum EmptyList<T> : Go23WalletSDK.DecodableDefault.Source where T : Swift.Decodable, T : Swift.ExpressibleByArrayLiteral {
-      public static var defaultValue: T {
-        get
-      }
-      public typealias Value = T
-    }
-    public enum EmptyMap<T> : Go23WalletSDK.DecodableDefault.Source where T : Swift.Decodable, T : Swift.ExpressibleByDictionaryLiteral {
-      public static var defaultValue: T {
-        get
-      }
-      public typealias Value = T
-    }
-    public enum Zero : Go23WalletSDK.DecodableDefault.Source {
-      public static var defaultValue: Swift.Int {
-        get
-      }
-      public typealias Value = Swift.Int
-    }
-    public enum ZeroDouble : Go23WalletSDK.DecodableDefault.Source {
-      public static var defaultValue: Swift.Double {
-        get
-      }
-      public typealias Value = Swift.Double
-    }
-  }
+extension Go23WalletSDK.DownloadRequest {
+  @discardableResult
+  public func response(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (Go23WalletSDK.DefaultDownloadResponse) -> Swift.Void) -> Self
+  @discardableResult
+  public func response<T>(queue: Dispatch.DispatchQueue? = nil, responseSerializer: T, completionHandler: @escaping (Go23WalletSDK.DownloadResponse<T.SerializedObject>) -> Swift.Void) -> Self where T : Go23WalletSDK.DownloadResponseSerializerProtocol
 }
-extension Go23WalletSDK.DecodableDefault {
-  public typealias True = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.True>
-  public typealias False = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.False>
-  public typealias EmptyString = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.EmptyString>
-  public typealias EmptyList<T> = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.EmptyList<T>> where T : Swift.Decodable, T : Swift.ExpressibleByArrayLiteral
-  public typealias EmptyMap<T> = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.EmptyMap<T>> where T : Swift.Decodable, T : Swift.ExpressibleByDictionaryLiteral
-  public typealias Zero = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.Zero>
-  public typealias ZeroDouble = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.ZeroDouble>
+extension Go23WalletSDK.Request {
+  public static func serializeResponseData(response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> Go23WalletSDK.Result<Foundation.Data>
 }
-extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Equatable where Source.Value : Swift.Equatable {
-  public static func == (a: Go23WalletSDK.DecodableDefault.Wrapper<Source>, b: Go23WalletSDK.DecodableDefault.Wrapper<Source>) -> Swift.Bool
+extension Go23WalletSDK.DataRequest {
+  public static func dataResponseSerializer() -> Go23WalletSDK.DataResponseSerializer<Foundation.Data>
+  @discardableResult
+  public func responseData(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (Go23WalletSDK.DataResponse<Foundation.Data>) -> Swift.Void) -> Self
 }
-extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Hashable where Source.Value : Swift.Hashable {
-  public func hash(into hasher: inout Swift.Hasher)
-  public var hashValue: Swift.Int {
-    get
+extension Go23WalletSDK.DownloadRequest {
+  public static func dataResponseSerializer() -> Go23WalletSDK.DownloadResponseSerializer<Foundation.Data>
+  @discardableResult
+  public func responseData(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (Go23WalletSDK.DownloadResponse<Foundation.Data>) -> Swift.Void) -> Self
+}
+extension Go23WalletSDK.Request {
+  public static func serializeResponseString(encoding: Swift.String.Encoding?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> Go23WalletSDK.Result<Swift.String>
+}
+extension Go23WalletSDK.DataRequest {
+  public static func stringResponseSerializer(encoding: Swift.String.Encoding? = nil) -> Go23WalletSDK.DataResponseSerializer<Swift.String>
+  @discardableResult
+  public func responseString(queue: Dispatch.DispatchQueue? = nil, encoding: Swift.String.Encoding? = nil, completionHandler: @escaping (Go23WalletSDK.DataResponse<Swift.String>) -> Swift.Void) -> Self
+}
+extension Go23WalletSDK.DownloadRequest {
+  public static func stringResponseSerializer(encoding: Swift.String.Encoding? = nil) -> Go23WalletSDK.DownloadResponseSerializer<Swift.String>
+  @discardableResult
+  public func responseString(queue: Dispatch.DispatchQueue? = nil, encoding: Swift.String.Encoding? = nil, completionHandler: @escaping (Go23WalletSDK.DownloadResponse<Swift.String>) -> Swift.Void) -> Self
+}
+extension Go23WalletSDK.Request {
+  public static func serializeResponseJSON(options: Foundation.JSONSerialization.ReadingOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> Go23WalletSDK.Result<Any>
+}
+extension Go23WalletSDK.DataRequest {
+  public static func jsonResponseSerializer(options: Foundation.JSONSerialization.ReadingOptions = .allowFragments) -> Go23WalletSDK.DataResponseSerializer<Any>
+  @discardableResult
+  public func responseJSON(queue: Dispatch.DispatchQueue? = nil, options: Foundation.JSONSerialization.ReadingOptions = .allowFragments, completionHandler: @escaping (Go23WalletSDK.DataResponse<Any>) -> Swift.Void) -> Self
+}
+extension Go23WalletSDK.DownloadRequest {
+  public static func jsonResponseSerializer(options: Foundation.JSONSerialization.ReadingOptions = .allowFragments) -> Go23WalletSDK.DownloadResponseSerializer<Any>
+  @discardableResult
+  public func responseJSON(queue: Dispatch.DispatchQueue? = nil, options: Foundation.JSONSerialization.ReadingOptions = .allowFragments, completionHandler: @escaping (Go23WalletSDK.DownloadResponse<Any>) -> Swift.Void) -> Self
+}
+extension Go23WalletSDK.Request {
+  public static func serializeResponsePropertyList(options: Foundation.PropertyListSerialization.ReadOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> Go23WalletSDK.Result<Any>
+}
+extension Go23WalletSDK.DataRequest {
+  public static func propertyListResponseSerializer(options: Foundation.PropertyListSerialization.ReadOptions = []) -> Go23WalletSDK.DataResponseSerializer<Any>
+  @discardableResult
+  public func responsePropertyList(queue: Dispatch.DispatchQueue? = nil, options: Foundation.PropertyListSerialization.ReadOptions = [], completionHandler: @escaping (Go23WalletSDK.DataResponse<Any>) -> Swift.Void) -> Self
+}
+extension Go23WalletSDK.DownloadRequest {
+  public static func propertyListResponseSerializer(options: Foundation.PropertyListSerialization.ReadOptions = []) -> Go23WalletSDK.DownloadResponseSerializer<Any>
+  @discardableResult
+  public func responsePropertyList(queue: Dispatch.DispatchQueue? = nil, options: Foundation.PropertyListSerialization.ReadOptions = [], completionHandler: @escaping (Go23WalletSDK.DownloadResponse<Any>) -> Swift.Void) -> Self
+}
+extension Go23WalletSDK.Request {
+  public enum ValidationResult {
+    case success
+    case failure(Swift.Error)
   }
 }
-extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Encodable where Source.Value : Swift.Encodable {
-  public func encode(to encoder: Swift.Encoder) throws
+extension Go23WalletSDK.DataRequest {
+  public typealias Validation = (Foundation.URLRequest?, Foundation.HTTPURLResponse, Foundation.Data?) -> Go23WalletSDK.Request.ValidationResult
+  @discardableResult
+  public func validate(_ validation: @escaping Go23WalletSDK.DataRequest.Validation) -> Self
+  @discardableResult
+  public func validate<S>(statusCode acceptableStatusCodes: S) -> Self where S : Swift.Sequence, S.Element == Swift.Int
+  @discardableResult
+  public func validate<S>(contentType acceptableContentTypes: S) -> Self where S : Swift.Sequence, S.Element == Swift.String
+  @discardableResult
+  public func validate() -> Self
 }
-public protocol Go23Updatable {
-  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool) throws -> Swift.Array<Swift.UInt8>
-  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+extension Go23WalletSDK.DownloadRequest {
+  public typealias Validation = (_ request: Foundation.URLRequest?, _ response: Foundation.HTTPURLResponse, _ temporaryURL: Foundation.URL?, _ destinationURL: Foundation.URL?) -> Go23WalletSDK.Request.ValidationResult
+  @discardableResult
+  public func validate(_ validation: @escaping Go23WalletSDK.DownloadRequest.Validation) -> Self
+  @discardableResult
+  public func validate<S>(statusCode acceptableStatusCodes: S) -> Self where S : Swift.Sequence, S.Element == Swift.Int
+  @discardableResult
+  public func validate<S>(contentType acceptableContentTypes: S) -> Self where S : Swift.Sequence, S.Element == Swift.String
+  @discardableResult
+  public func validate() -> Self
 }
-extension Go23WalletSDK.Go23Updatable {
-  @inlinable public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
-    let processed = try update(withBytes: bytes, isLast: isLast)
-    if !processed.isEmpty {
-      output(processed)
-    }
+open class SessionManager {
+  public enum MultipartFormDataEncodingResult {
+    case success(request: Go23WalletSDK.UploadRequest, streamingFromDisk: Swift.Bool, streamFileURL: Foundation.URL?)
+    case failure(Swift.Error)
   }
-  @inlinable public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8> {
-    try self.update(withBytes: bytes, isLast: isLast)
-  }
-  @inlinable public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8> {
-    try self.update(withBytes: bytes.slice, isLast: isLast)
-  }
-  @inlinable public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
-    try self.update(withBytes: bytes.slice, isLast: isLast, output: output)
-  }
-  @inlinable public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8> {
-    try self.update(withBytes: bytes, isLast: true)
-  }
-  @inlinable public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8> {
-    try self.finish(withBytes: bytes.slice)
-  }
-  @inlinable public mutating func finish() throws -> Swift.Array<Swift.UInt8> {
-    try self.update(withBytes: [], isLast: true)
-  }
-  @inlinable public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
-    let processed = try update(withBytes: bytes, isLast: true)
-    if !processed.isEmpty {
-      output(processed)
-    }
-  }
-  @inlinable public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
-    try self.finish(withBytes: bytes.slice, output: output)
-  }
-  @inlinable public mutating func finish(output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws {
-    try self.finish(withBytes: [], output: output)
-  }
-}
-public struct Go23WalletTokenListModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23WalletTokenModel] {
+  public static let `default`: Go23WalletSDK.SessionManager
+  public static let defaultHTTPHeaders: Go23WalletSDK.HTTPHeaders
+  public static let multipartFormDataEncodingMemoryThreshold: Swift.UInt64
+  final public let session: Foundation.URLSession
+  final public let delegate: Go23WalletSDK.SessionDelegate
+  open var startRequestsImmediately: Swift.Bool
+  open var adapter: Go23WalletSDK.RequestAdapter?
+  open var retrier: Go23WalletSDK.RequestRetrier? {
     get
     set
-    _modify
   }
-  @Go23WalletSDK.DecodableDefault.Zero public var page: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var pageSize: Swift.Int {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class Go23WalletSDK : ObjectiveC.NSObject {
-  public static var shared: Go23WalletSDK.Go23WalletSDK!
-  @objc override dynamic public func copy() -> Any
-  @objc override dynamic public func mutableCopy() -> Any
-  public static func auth(appkey: Swift.String, secretKey: Swift.String, completion: @escaping ((Swift.Bool) -> Swift.Void))
+  open var backgroundCompletionHandler: (() -> Swift.Void)?
+  public init(configuration: Foundation.URLSessionConfiguration = URLSessionConfiguration.default, delegate: Go23WalletSDK.SessionDelegate = SessionDelegate(), serverTrustPolicyManager: Go23WalletSDK.ServerTrustPolicyManager? = nil)
+  public init?(session: Foundation.URLSession, delegate: Go23WalletSDK.SessionDelegate, serverTrustPolicyManager: Go23WalletSDK.ServerTrustPolicyManager? = nil)
   @objc deinit
-}
-extension Go23WalletSDK.Go23WalletSDK {
-  public func generateWallet(completion: @escaping ((Go23WalletSDK.Go23KeygenResult) -> Swift.Void))
-  public func fetchUserWallet(completion: @escaping ((Go23WalletSDK.Go23WalletStatus) -> Swift.Void))
-}
-extension Go23WalletSDK.Go23WalletSDK {
-  public func sendVerifyCode(for type: Go23WalletSDK.Go23VerifyCodeType, completion: @escaping ((Swift.Bool) -> Swift.Void))
-}
-extension Go23WalletSDK.Go23WalletSDK {
-  public func reshardWallet(with address: Swift.String, shard: Swift.String, completion: @escaping ((Go23WalletSDK.Go23ReshardResult) -> Swift.Void))
-  public func forgetShardPincode(with address: Swift.String, shard: Swift.String, verifyCode code: Swift.String, completion: @escaping ((Go23WalletSDK.Go23ReshardResult) -> Swift.Void))
-  public func recoverWallet(with addr: Swift.String, verifyCode code: Swift.String, completion: @escaping ((Go23WalletSDK.Go23RecoverResult) -> Swift.Void))
-}
-public struct Go23ChainTokenInfoModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var contractAddress: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var decimal: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
+  @discardableResult
+  open func request(_ url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .get, parameters: Go23WalletSDK.Parameters? = nil, encoding: Go23WalletSDK.ParameterEncoding = URLEncoding.default, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.DataRequest
+  @discardableResult
+  open func request(_ urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.DataRequest
+  @discardableResult
+  open func download(_ url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .get, parameters: Go23WalletSDK.Parameters? = nil, encoding: Go23WalletSDK.ParameterEncoding = URLEncoding.default, headers: Go23WalletSDK.HTTPHeaders? = nil, to destination: Go23WalletSDK.DownloadRequest.DownloadFileDestination? = nil) -> Go23WalletSDK.DownloadRequest
+  @discardableResult
+  open func download(_ urlRequest: Go23WalletSDK.URLRequestConvertible, to destination: Go23WalletSDK.DownloadRequest.DownloadFileDestination? = nil) -> Go23WalletSDK.DownloadRequest
+  @discardableResult
+  open func download(resumingWith resumeData: Foundation.Data, to destination: Go23WalletSDK.DownloadRequest.DownloadFileDestination? = nil) -> Go23WalletSDK.DownloadRequest
+  @discardableResult
+  open func upload(_ fileURL: Foundation.URL, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.UploadRequest
+  @discardableResult
+  open func upload(_ fileURL: Foundation.URL, with urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.UploadRequest
+  @discardableResult
+  open func upload(_ data: Foundation.Data, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.UploadRequest
+  @discardableResult
+  open func upload(_ data: Foundation.Data, with urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.UploadRequest
+  @discardableResult
+  open func upload(_ stream: Foundation.InputStream, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil) -> Go23WalletSDK.UploadRequest
+  @discardableResult
+  open func upload(_ stream: Foundation.InputStream, with urlRequest: Go23WalletSDK.URLRequestConvertible) -> Go23WalletSDK.UploadRequest
+  open func upload(multipartFormData: @escaping (Go23WalletSDK.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, to url: Go23WalletSDK.URLConvertible, method: Go23WalletSDK.HTTPMethod = .post, headers: Go23WalletSDK.HTTPHeaders? = nil, queue: Dispatch.DispatchQueue? = nil, encodingCompletion: ((Go23WalletSDK.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+  open func upload(multipartFormData: @escaping (Go23WalletSDK.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: Go23WalletSDK.URLRequestConvertible, queue: Dispatch.DispatchQueue? = nil, encodingCompletion: ((Go23WalletSDK.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  @discardableResult
+  open func stream(withHostName hostName: Swift.String, port: Swift.Int) -> Go23WalletSDK.StreamRequest
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  @discardableResult
+  open func stream(with netService: Foundation.NetService) -> Go23WalletSDK.StreamRequest
 }
 public struct Go23WalletTokenModel : Swift.Codable {
   @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
@@ -540,6 +1640,46 @@ public struct Go23WalletTokenModel : Swift.Codable {
     _modify
   }
   @Go23WalletSDK.DecodableDefault.EmptyString public var chainImageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension Go23WalletSDK.BigUInt {
+  public func greatestCommonDivisor(with b: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public func inverse(_ modulus: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt?
+}
+extension Go23WalletSDK.BigInt {
+  public func greatestCommonDivisor(with b: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public func inverse(_ modulus: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt?
+}
+public enum Go23ActivityFilterType : Swift.String {
+  case all
+  case outcome
+  case fail
+  case income
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum Go23NFTError : Swift.Error {
+}
+public struct Go23ChainTokenListModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23ChainTokenModel] {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var page: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var pageSize: Swift.Int {
     get
     set
     _modify
@@ -618,87 +1758,11 @@ public struct Go23WalletTokenModel : Swift.Codable {
     data += Array<UInt8>(repeating: 0, count: blockSize + max - 1 - (msgLength % blockSize))
   }
 }
-public struct Go23WalletListModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyList public var walletList: [Go23WalletSDK.Go23WalletInfoModel] {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-public struct Go23TokenDetailModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var contractAddress: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.False public var isSelected: Swift.Bool {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.False public var isPlatform: Swift.Bool {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var chainImageUrl: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var balance: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var balanceU: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var walletAddress: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var decimal: Swift.Int {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-extension Go23WalletSDK.Go23WalletSDK {
-  public func getWalletTokenList(with address: Swift.String, chainId: Swift.Int, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23WalletTokenListModel?) -> Swift.Void))
-  public func getChainTokenList(with chainId: Swift.Int, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23ChainTokenListModel?) -> Swift.Void))
-  public func getTokenBalance(for tokenAddress: Swift.String, walletAddress: Swift.String, chainId: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23TokenBalanceModel?) -> Swift.Void))
-  public func getTokenDetail(for chainId: Swift.Int, tokenAddress: Swift.String, completion: @escaping ((Go23WalletSDK.Go23TokenDetailModel?) -> Swift.Void))
-  public func checkToken(with address: Swift.String, chainid: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23ChainTokenInfoModel?) -> Swift.Void))
-  public func addToken(with chainId: Swift.Int, walletAddress: Swift.String, contractAddress: Swift.String, completion: @escaping ((Swift.Bool) -> Swift.Void))
-  public func hideToken(with chainId: Swift.Int, walletAddress: Swift.String, contractAddress: Swift.String, completion: @escaping ((Swift.Bool) -> Swift.Void))
+public enum Go23WalletStatus {
+  case none
+  case normal([Go23WalletSDK.Go23WalletInfoModel])
+  case recover([Go23WalletSDK.Go23WalletInfoModel])
+  case failure(Swift.String)
 }
 public struct Go23ActivityModel : Swift.Codable {
   @Go23WalletSDK.DecodableDefault.Zero public var transactionId: Swift.Int {
@@ -781,7 +1845,7 @@ public struct Go23ActivityModel : Swift.Codable {
     set
     _modify
   }
-  @Go23WalletSDK.DecodableDefault.ZeroDouble public var balanceU: Swift.Double {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var balanceU: Swift.String {
     get
     set
     _modify
@@ -794,18 +1858,89 @@ public struct Go23ActivityModel : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
-public struct Go23ActivityListModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23ActivityModel] {
+extension Go23WalletSDK.BigUInt {
+  public func isStrongProbablePrime(_ base: Go23WalletSDK.BigUInt) -> Swift.Bool
+  public func isPrime(rounds: Swift.Int = 10) -> Swift.Bool
+}
+extension Go23WalletSDK.BigInt {
+  public func isStrongProbablePrime(_ base: Go23WalletSDK.BigInt) -> Swift.Bool
+  public func isPrime(rounds: Swift.Int = 10) -> Swift.Bool
+}
+public struct BigInt : Swift.SignedInteger {
+  public enum Sign {
+    case plus
+    case minus
+    public static func == (a: Go23WalletSDK.BigInt.Sign, b: Go23WalletSDK.BigInt.Sign) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public typealias Magnitude = Go23WalletSDK.BigUInt
+  public typealias Word = Go23WalletSDK.BigUInt.Word
+  public static var isSigned: Swift.Bool {
+    get
+  }
+  public var magnitude: Go23WalletSDK.BigUInt
+  public var sign: Go23WalletSDK.BigInt.Sign
+  public init(sign: Go23WalletSDK.BigInt.Sign, magnitude: Go23WalletSDK.BigUInt)
+  public var isZero: Swift.Bool {
+    get
+  }
+  public func signum() -> Go23WalletSDK.BigInt
+}
+public struct UserInfoModel : Swift.Codable {
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+open class ServerTrustPolicyManager {
+  final public let policies: [Swift.String : Go23WalletSDK.ServerTrustPolicy]
+  public init(policies: [Swift.String : Go23WalletSDK.ServerTrustPolicy])
+  open func serverTrustPolicy(forHost host: Swift.String) -> Go23WalletSDK.ServerTrustPolicy?
+  @objc deinit
+}
+public enum ServerTrustPolicy {
+  case performDefaultEvaluation(validateHost: Swift.Bool)
+  case performRevokedEvaluation(validateHost: Swift.Bool, revocationFlags: CoreFoundation.CFOptionFlags)
+  case pinCertificates(certificates: [Security.SecCertificate], validateCertificateChain: Swift.Bool, validateHost: Swift.Bool)
+  case pinPublicKeys(publicKeys: [Security.SecKey], validateCertificateChain: Swift.Bool, validateHost: Swift.Bool)
+  case disableEvaluation
+  case customEvaluation((_ serverTrust: Security.SecTrust, _ host: Swift.String) -> Swift.Bool)
+  public static func certificates(in bundle: Foundation.Bundle = Bundle.main) -> [Security.SecCertificate]
+  public static func publicKeys(in bundle: Foundation.Bundle = Bundle.main) -> [Security.SecKey]
+  public func evaluate(_ serverTrust: Security.SecTrust, forHost host: Swift.String) -> Swift.Bool
+}
+public struct Go23SendTransactionModel {
+}
+extension Go23WalletSDK.BigUInt : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension Go23WalletSDK.BigInt : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct Go23WalletInfoModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
     get
     set
     _modify
   }
-  @Go23WalletSDK.DecodableDefault.Zero public var page: Swift.Int {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var address: Swift.String {
     get
     set
     _modify
   }
-  @Go23WalletSDK.DecodableDefault.Zero public var pageSize: Swift.Int {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var avatar: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var clientMd5: Swift.String {
     get
     set
     _modify
@@ -813,94 +1948,177 @@ public struct Go23ActivityListModel : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
-extension Go23WalletSDK.Go23WalletSDK {
-  public func registerUser(with uniqueId: Swift.String, email: Swift.String, phone: Swift.String, completion: @escaping ((Go23WalletSDK.UserInfoModel?) -> Swift.Void))
-  public func connectAccount(with uuid: Swift.String, completion: @escaping ((Swift.Bool) -> Swift.Void))
-}
-public enum JsonValue : Swift.Codable {
-  case string(Swift.String)
-  case int(Swift.Int)
-  case uint(Swift.UInt)
-  case int8(Swift.Int8)
-  case uint8(Swift.UInt8)
-  case int16(Swift.Int16)
-  case uint16(Swift.UInt16)
-  case int32(Swift.Int32)
-  case uint32(Swift.UInt32)
-  case int64(Swift.Int64)
-  case uint64(Swift.UInt64)
-  case float(Swift.Float)
-  case double(Swift.Double)
-  case bool(Swift.Bool)
-  case object([Swift.String : Go23WalletSDK.JsonValue])
-  case array([Go23WalletSDK.JsonValue])
-  public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
-  public var dictionaryValue: [Swift.String : Go23WalletSDK.JsonValue]? {
-    get
-  }
-  public var arrayValue: [Go23WalletSDK.JsonValue]? {
-    get
-  }
-  public var intValue: Swift.Int {
-    get
-  }
-  public var int8Value: Swift.Int8 {
-    get
-  }
-  public var int16Value: Swift.Int16 {
-    get
-  }
-  public var int32Value: Swift.Int32 {
-    get
-  }
-  public var int64Value: Swift.Int64 {
-    get
-  }
-  public var uintValue: Swift.UInt {
-    get
-  }
-  public var uint8Value: Swift.UInt8 {
-    get
-  }
-  public var uint16Value: Swift.UInt16 {
-    get
-  }
-  public var uint32Value: Swift.UInt32 {
-    get
-  }
-  public var uint64Value: Swift.UInt64 {
-    get
-  }
-  public var floatValue: Swift.Float {
-    get
-  }
-  public var doubleValue: Swift.Double {
-    get
-  }
-  public var boolValue: Swift.Bool {
-    get
-  }
-}
-public enum Go23WalletStatus {
-  case none
-  case normal([Go23WalletSDK.Go23WalletInfoModel])
-  case recover([Go23WalletSDK.Go23WalletInfoModel])
-  case failure(Swift.String)
-}
-public struct Go23NFTTransactionModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.False public var isOk: Swift.Bool {
+public struct Go23TokenDetailModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var contractAddress: Swift.String {
     get
     set
     _modify
   }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var gas: Swift.String {
+  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.False public var isSelected: Swift.Bool {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.False public var isPlatform: Swift.Bool {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var chainImageUrl: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var balance: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var balanceU: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var walletAddress: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var decimal: Swift.Int {
     get
     set
     _modify
   }
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
+}
+public enum HTTPMethod : Swift.String {
+  case options
+  case get
+  case head
+  case post
+  case put
+  case patch
+  case delete
+  case trace
+  case connect
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public typealias Parameters = [Swift.String : Any]
+public protocol ParameterEncoding {
+  func encode(_ urlRequest: Go23WalletSDK.URLRequestConvertible, with parameters: Go23WalletSDK.Parameters?) throws -> Foundation.URLRequest
+}
+public struct URLEncoding : Go23WalletSDK.ParameterEncoding {
+  public enum Destination {
+    case methodDependent, queryString, httpBody
+    public static func == (a: Go23WalletSDK.URLEncoding.Destination, b: Go23WalletSDK.URLEncoding.Destination) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum ArrayEncoding {
+    case brackets, noBrackets
+    public static func == (a: Go23WalletSDK.URLEncoding.ArrayEncoding, b: Go23WalletSDK.URLEncoding.ArrayEncoding) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum BoolEncoding {
+    case numeric, literal
+    public static func == (a: Go23WalletSDK.URLEncoding.BoolEncoding, b: Go23WalletSDK.URLEncoding.BoolEncoding) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static var `default`: Go23WalletSDK.URLEncoding {
+    get
+  }
+  public static var methodDependent: Go23WalletSDK.URLEncoding {
+    get
+  }
+  public static var queryString: Go23WalletSDK.URLEncoding {
+    get
+  }
+  public static var httpBody: Go23WalletSDK.URLEncoding {
+    get
+  }
+  public let destination: Go23WalletSDK.URLEncoding.Destination
+  public let arrayEncoding: Go23WalletSDK.URLEncoding.ArrayEncoding
+  public let boolEncoding: Go23WalletSDK.URLEncoding.BoolEncoding
+  public init(destination: Go23WalletSDK.URLEncoding.Destination = .methodDependent, arrayEncoding: Go23WalletSDK.URLEncoding.ArrayEncoding = .brackets, boolEncoding: Go23WalletSDK.URLEncoding.BoolEncoding = .numeric)
+  public func encode(_ urlRequest: Go23WalletSDK.URLRequestConvertible, with parameters: Go23WalletSDK.Parameters?) throws -> Foundation.URLRequest
+  public func queryComponents(fromKey key: Swift.String, value: Any) -> [(Swift.String, Swift.String)]
+  public func escape(_ string: Swift.String) -> Swift.String
+}
+public struct JSONEncoding : Go23WalletSDK.ParameterEncoding {
+  public static var `default`: Go23WalletSDK.JSONEncoding {
+    get
+  }
+  public static var prettyPrinted: Go23WalletSDK.JSONEncoding {
+    get
+  }
+  public let options: Foundation.JSONSerialization.WritingOptions
+  public init(options: Foundation.JSONSerialization.WritingOptions = [])
+  public func encode(_ urlRequest: Go23WalletSDK.URLRequestConvertible, with parameters: Go23WalletSDK.Parameters?) throws -> Foundation.URLRequest
+  public func encode(_ urlRequest: Go23WalletSDK.URLRequestConvertible, withJSONObject jsonObject: Any? = nil) throws -> Foundation.URLRequest
+}
+public struct PropertyListEncoding : Go23WalletSDK.ParameterEncoding {
+  public static var `default`: Go23WalletSDK.PropertyListEncoding {
+    get
+  }
+  public static var xml: Go23WalletSDK.PropertyListEncoding {
+    get
+  }
+  public static var binary: Go23WalletSDK.PropertyListEncoding {
+    get
+  }
+  public let format: Foundation.PropertyListSerialization.PropertyListFormat
+  public let options: Foundation.PropertyListSerialization.WriteOptions
+  public init(format: Foundation.PropertyListSerialization.PropertyListFormat = .xml, options: Foundation.PropertyListSerialization.WriteOptions = 0)
+  public func encode(_ urlRequest: Go23WalletSDK.URLRequestConvertible, with parameters: Go23WalletSDK.Parameters?) throws -> Foundation.URLRequest
+}
+extension Go23WalletSDK.BigUInt {
+  public static func >>= <Other>(lhs: inout Go23WalletSDK.BigUInt, rhs: Other) where Other : Swift.BinaryInteger
+  public static func <<= <Other>(lhs: inout Go23WalletSDK.BigUInt, rhs: Other) where Other : Swift.BinaryInteger
+  public static func >> <Other>(lhs: Go23WalletSDK.BigUInt, rhs: Other) -> Go23WalletSDK.BigUInt where Other : Swift.BinaryInteger
+  public static func << <Other>(lhs: Go23WalletSDK.BigUInt, rhs: Other) -> Go23WalletSDK.BigUInt where Other : Swift.BinaryInteger
+}
+extension Go23WalletSDK.BigInt {
+  public static func &<< (left: Go23WalletSDK.BigInt, right: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func &<<= (left: inout Go23WalletSDK.BigInt, right: Go23WalletSDK.BigInt)
+  public static func &>> (left: Go23WalletSDK.BigInt, right: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func &>>= (left: inout Go23WalletSDK.BigInt, right: Go23WalletSDK.BigInt)
+  public static func << <Other>(lhs: Go23WalletSDK.BigInt, rhs: Other) -> Go23WalletSDK.BigInt where Other : Swift.BinaryInteger
+  public static func <<= <Other>(lhs: inout Go23WalletSDK.BigInt, rhs: Other) where Other : Swift.BinaryInteger
+  public static func >> <Other>(lhs: Go23WalletSDK.BigInt, rhs: Other) -> Go23WalletSDK.BigInt where Other : Swift.BinaryInteger
+  public static func >>= <Other>(lhs: inout Go23WalletSDK.BigInt, rhs: Other) where Other : Swift.BinaryInteger
 }
 extension Go23WalletSDK.Go23WalletSDK {
   public func sendTransaction(with model: Go23WalletSDK.Go23SendTransactionModel, completion: @escaping ((Swift.Bool, Swift.String) -> Swift.Void))
@@ -909,7 +2127,107 @@ extension Go23WalletSDK.Go23WalletSDK {
   public func getActivityList(with chainId: Swift.Int, contract: Swift.String, walletAddress: Swift.String, type: Go23WalletSDK.Go23ActivityFilterType, pageNumber: Swift.Int, pageSize: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23ActivityListModel?) -> Swift.Void))
   public func getActivityDetail(with hash: Swift.String, walletAddress: Swift.String, completion: @escaping ((Go23WalletSDK.Go23ActivityDetailModel?) -> Swift.Void))
 }
-public struct Go23WalletNFTModel : Swift.Codable {
+public struct Go23TransactionGasModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var suggestGas: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension Go23WalletSDK.BigUInt {
+  public init(_ buffer: Swift.UnsafeRawBufferPointer)
+  public init(_ data: Foundation.Data)
+  public func serialize() -> Foundation.Data
+}
+extension Go23WalletSDK.BigInt {
+  public init(_ buffer: Swift.UnsafeRawBufferPointer)
+  public init(_ data: Foundation.Data)
+  public func serialize() -> Foundation.Data
+}
+public struct Go23ChainTokenInfoModel : Swift.Codable {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var contractAddress: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.Zero public var decimal: Swift.Int {
+    get
+    set
+    _modify
+  }
+  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
+    get
+    set
+    _modify
+  }
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension Go23WalletSDK.BigUInt {
+  public init?<T>(exactly source: T) where T : Swift.BinaryInteger
+  public init<T>(_ source: T) where T : Swift.BinaryInteger
+  public init<T>(truncatingIfNeeded source: T) where T : Swift.BinaryInteger
+  public init<T>(clamping source: T) where T : Swift.BinaryInteger
+}
+extension Go23WalletSDK.BigInt {
+  public init()
+  public init(_ integer: Go23WalletSDK.BigUInt)
+  public init<T>(_ source: T) where T : Swift.BinaryInteger
+  public init?<T>(exactly source: T) where T : Swift.BinaryInteger
+  public init<T>(clamping source: T) where T : Swift.BinaryInteger
+  public init<T>(truncatingIfNeeded source: T) where T : Swift.BinaryInteger
+}
+extension Go23WalletSDK.BigUInt : Swift.ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: Swift.UInt64)
+  public typealias IntegerLiteralType = Swift.UInt64
+}
+extension Go23WalletSDK.BigInt : Swift.ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: Swift.Int64)
+  public typealias IntegerLiteralType = Swift.Int64
+}
+extension Go23WalletSDK.BigUInt {
+  public func power(_ exponent: Swift.Int) -> Go23WalletSDK.BigUInt
+  public func power(_ exponent: Go23WalletSDK.BigUInt, modulus: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+}
+extension Go23WalletSDK.BigInt {
+  public func power(_ exponent: Swift.Int) -> Go23WalletSDK.BigInt
+  public func power(_ exponent: Go23WalletSDK.BigInt, modulus: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+}
+public struct Go23Digest {
+  public static func md5(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
+}
+extension Foundation.Data {
+  public var bytes: Swift.Array<Swift.UInt8> {
+    get
+  }
+}
+extension Swift.String {
+  @inlinable public var md5bytes: Swift.Array<Swift.UInt8> {
+    get {
+        data(using: String.Encoding.utf8, allowLossyConversion: true)?.bytes ?? Array(utf8)
+    }
+  }
+  @inlinable public func go23md5() -> Swift.String {
+        self.md5bytes.md5().md5ToHexString()
+    }
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public func md5() -> [Element]
+  public func md5ToHexString() -> Swift.String
+}
+public struct Go23NFTDetailModel : Swift.Codable {
   @Go23WalletSDK.DecodableDefault.EmptyString public var tokenId: Swift.String {
     get
     set
@@ -960,86 +2278,12 @@ public struct Go23WalletNFTModel : Swift.Codable {
     set
     _modify
   }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-@_specialize(exported: false, kind: full, where T == Swift.Int)
-@_specialize(exported: false, kind: full, where T == Swift.UInt)
-@_specialize(exported: false, kind: full, where T == Swift.UInt8)
-@_specialize(exported: false, kind: full, where T == Swift.UInt16)
-@_specialize(exported: false, kind: full, where T == Swift.UInt32)
-@_specialize(exported: false, kind: full, where T == Swift.UInt64)
-@inlinable internal func arrayOfBytes<T>(value: T, length totalBytes: Swift.Int = MemoryLayout<T>.size) -> Swift.Array<Swift.UInt8> where T : Swift.FixedWidthInteger {
-  let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
-  valuePointer.pointee = value
-
-  let bytesPointer = UnsafeMutablePointer<UInt8>(OpaquePointer(valuePointer))
-  var bytes = Array<UInt8>(repeating: 0, count: totalBytes)
-  for j in 0..<min(MemoryLayout<T>.size, totalBytes) {
-    bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
-  }
-
-  valuePointer.deinitialize(count: 1)
-  valuePointer.deallocate()
-
-  return bytes
-}
-extension Swift.FixedWidthInteger {
-  @inlinable internal func bytes(totalBytes: Swift.Int = MemoryLayout<Self>.size) -> Swift.Array<Swift.UInt8> {
-    arrayOfBytes(value: self.littleEndian, length: totalBytes)
-    // TODO: adjust bytes order
-    // var value = self.littleEndian
-    // return withUnsafeBytes(of: &value, Array.init).reversed()
-  }
-}
-extension Swift.Array {
-  @inlinable internal init(reserveCapacity: Swift.Int) {
-    self = Array<Element>()
-    self.reserveCapacity(reserveCapacity)
-  }
-  @inlinable internal var slice: Swift.ArraySlice<Element> {
-    get {
-    self[self.startIndex ..< self.endIndex]
-  }
-  }
-  @inlinable internal subscript(safe index: Swift.Array<Element>.Index) -> Element? {
-    get {
-    return indices.contains(index) ? self[index] : nil
-  }
-  }
-}
-public struct Go23NFTBaseInfoModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var nftId: Swift.String {
+  @Go23WalletSDK.DecodableDefault.EmptyList public var attributes: [Go23WalletSDK.NFTAttribute] {
     get
     set
     _modify
   }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var addr: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var blockChainId: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var chainImageUrl: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var url: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
+  @Go23WalletSDK.DecodableDefault.EmptyString public var series: Swift.String {
     get
     set
     _modify
@@ -1047,84 +2291,99 @@ public struct Go23NFTBaseInfoModel : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
-public struct Go23ActivityDetailModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.Zero public var status: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var fromAddr: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var toAddr: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var hash: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var network: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var type: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var amount: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var gasFee: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var image: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var imageName: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var token: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var time: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var gasSymbol: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var transactionClass: Swift.Int {
-    get
-    set
-    _modify
-  }
+public struct NFTAttribute : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
+}
+extension Go23WalletSDK.BigUInt {
+  public static func + (a: Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public static func += (a: inout Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt)
+}
+extension Go23WalletSDK.BigInt {
+  public static func + (a: Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func += (a: inout Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt)
+}
+@objc @_inheritsConvenienceInitializers open class SessionDelegate : ObjectiveC.NSObject {
+  open var sessionDidBecomeInvalidWithError: ((Foundation.URLSession, Swift.Error?) -> Swift.Void)?
+  open var sessionDidReceiveChallenge: ((Foundation.URLSession, Foundation.URLAuthenticationChallenge) -> (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?))?
+  open var sessionDidReceiveChallengeWithCompletion: ((Foundation.URLSession, Foundation.URLAuthenticationChallenge, @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void) -> Swift.Void)?
+  open var sessionDidFinishEventsForBackgroundURLSession: ((Foundation.URLSession) -> Swift.Void)?
+  open var taskWillPerformHTTPRedirection: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.HTTPURLResponse, Foundation.URLRequest) -> Foundation.URLRequest?)?
+  open var taskWillPerformHTTPRedirectionWithCompletion: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.HTTPURLResponse, Foundation.URLRequest, @escaping (Foundation.URLRequest?) -> Swift.Void) -> Swift.Void)?
+  open var taskDidReceiveChallenge: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.URLAuthenticationChallenge) -> (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?))?
+  open var taskDidReceiveChallengeWithCompletion: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.URLAuthenticationChallenge, @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void) -> Swift.Void)?
+  open var taskNeedNewBodyStream: ((Foundation.URLSession, Foundation.URLSessionTask) -> Foundation.InputStream?)?
+  open var taskNeedNewBodyStreamWithCompletion: ((Foundation.URLSession, Foundation.URLSessionTask, @escaping (Foundation.InputStream?) -> Swift.Void) -> Swift.Void)?
+  open var taskDidSendBodyData: ((Foundation.URLSession, Foundation.URLSessionTask, Swift.Int64, Swift.Int64, Swift.Int64) -> Swift.Void)?
+  open var taskDidComplete: ((Foundation.URLSession, Foundation.URLSessionTask, Swift.Error?) -> Swift.Void)?
+  open var dataTaskDidReceiveResponse: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLResponse) -> Foundation.URLSession.ResponseDisposition)?
+  open var dataTaskDidReceiveResponseWithCompletion: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLResponse, @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void) -> Swift.Void)?
+  open var dataTaskDidBecomeDownloadTask: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLSessionDownloadTask) -> Swift.Void)?
+  open var dataTaskDidReceiveData: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.Data) -> Swift.Void)?
+  open var dataTaskWillCacheResponse: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.CachedURLResponse) -> Foundation.CachedURLResponse?)?
+  open var dataTaskWillCacheResponseWithCompletion: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.CachedURLResponse, @escaping (Foundation.CachedURLResponse?) -> Swift.Void) -> Swift.Void)?
+  open var downloadTaskDidFinishDownloadingToURL: ((Foundation.URLSession, Foundation.URLSessionDownloadTask, Foundation.URL) -> Swift.Void)?
+  open var downloadTaskDidWriteData: ((Foundation.URLSession, Foundation.URLSessionDownloadTask, Swift.Int64, Swift.Int64, Swift.Int64) -> Swift.Void)?
+  open var downloadTaskDidResumeAtOffset: ((Foundation.URLSession, Foundation.URLSessionDownloadTask, Swift.Int64, Swift.Int64) -> Swift.Void)?
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskReadClosed: ((Foundation.URLSession, Foundation.URLSessionStreamTask) -> Swift.Void)? {
+    get
+    set
+  }
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskWriteClosed: ((Foundation.URLSession, Foundation.URLSessionStreamTask) -> Swift.Void)? {
+    get
+    set
+  }
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskBetterRouteDiscovered: ((Foundation.URLSession, Foundation.URLSessionStreamTask) -> Swift.Void)? {
+    get
+    set
+  }
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskDidBecomeInputAndOutputStreams: ((Foundation.URLSession, Foundation.URLSessionStreamTask, Foundation.InputStream, Foundation.OutputStream) -> Swift.Void)? {
+    get
+    set
+  }
+  open subscript(task: Foundation.URLSessionTask) -> Go23WalletSDK.Request? {
+    get
+    set
+  }
+  @objc override dynamic public init()
+  @objc override dynamic open func responds(to selector: ObjectiveC.Selector) -> Swift.Bool
+  @objc deinit
+}
+extension Go23WalletSDK.SessionDelegate : Foundation.URLSessionDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, didBecomeInvalidWithError error: Swift.Error?)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
+  @objc dynamic open func urlSessionDidFinishEvents(forBackgroundURLSession session: Foundation.URLSession)
+}
+extension Go23WalletSDK.SessionDelegate : Foundation.URLSessionTaskDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, willPerformHTTPRedirection response: Foundation.HTTPURLResponse, newRequest request: Foundation.URLRequest, completionHandler: @escaping (Foundation.URLRequest?) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, needNewBodyStream completionHandler: @escaping (Foundation.InputStream?) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didSendBodyData bytesSent: Swift.Int64, totalBytesSent: Swift.Int64, totalBytesExpectedToSend: Swift.Int64)
+  @available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+  @objc(URLSession:task:didFinishCollectingMetrics:) dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didFinishCollecting metrics: Foundation.URLSessionTaskMetrics)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: Swift.Error?)
+}
+extension Go23WalletSDK.SessionDelegate : Foundation.URLSessionDataDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive response: Foundation.URLResponse, completionHandler: @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didBecome downloadTask: Foundation.URLSessionDownloadTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive data: Foundation.Data)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, willCacheResponse proposedResponse: Foundation.CachedURLResponse, completionHandler: @escaping (Foundation.CachedURLResponse?) -> Swift.Void)
+}
+extension Go23WalletSDK.SessionDelegate : Foundation.URLSessionDownloadDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didFinishDownloadingTo location: Foundation.URL)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didWriteData bytesWritten: Swift.Int64, totalBytesWritten: Swift.Int64, totalBytesExpectedToWrite: Swift.Int64)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didResumeAtOffset fileOffset: Swift.Int64, expectedTotalBytes: Swift.Int64)
+}
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+extension Go23WalletSDK.SessionDelegate : Foundation.URLSessionStreamDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, readClosedFor streamTask: Foundation.URLSessionStreamTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, writeClosedFor streamTask: Foundation.URLSessionStreamTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, betterRouteDiscoveredFor streamTask: Foundation.URLSessionStreamTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, streamTask: Foundation.URLSessionStreamTask, didBecome inputStream: Foundation.InputStream, outputStream: Foundation.OutputStream)
 }
 public struct Go23WalletNFTListModel : Swift.Codable {
   @Go23WalletSDK.DecodableDefault.EmptyList public var listModel: [Go23WalletSDK.Go23WalletNFTModel] {
@@ -1142,32 +2401,6 @@ public struct Go23WalletNFTListModel : Swift.Codable {
     set
     _modify
   }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-public struct Go23Digest {
-  public static func md5(_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
-}
-extension Foundation.Data {
-  public var bytes: Swift.Array<Swift.UInt8> {
-    get
-  }
-}
-extension Swift.String {
-  @inlinable public var md5bytes: Swift.Array<Swift.UInt8> {
-    get {
-        data(using: String.Encoding.utf8, allowLossyConversion: true)?.bytes ?? Array(utf8)
-    }
-  }
-  @inlinable public func go23md5() -> Swift.String {
-        self.md5bytes.md5().md5ToHexString()
-    }
-}
-extension Swift.Array where Element == Swift.UInt8 {
-  public func md5() -> [Element]
-  public func md5ToHexString() -> Swift.String
-}
-public struct UserInfoModel : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
@@ -1280,178 +2513,151 @@ extension Go23WalletSDK.Go23ProgressHUD {
 @objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class Go23ProgressHUD : UIKit.UIView {
   @objc deinit
 }
-extension Go23WalletSDK.Go23WalletSDK {
-  public func getNftDetail(for nftid: Swift.String, contractAddress: Swift.String, walletAddress: Swift.String, chainId: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23NFTDetailModel?) -> Swift.Void))
-  public func getNftList(with walletAddress: Swift.String, chainId: Swift.Int, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23WalletNFTListModel?) -> Swift.Void))
-  public func addNFT(with contractAddress: Swift.String, walletAddress: Swift.String, chainId: Swift.Int, completion: @escaping ((Swift.Bool) -> Swift.Void))
+extension Go23WalletSDK.BigUInt : Swift.Strideable {
+  public typealias Stride = Go23WalletSDK.BigInt
+  public func advanced(by n: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigUInt
+  public func distance(to other: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigInt
 }
-public enum Go23VerifyCodeType {
-  case email(Swift.String)
-}
-public struct Go23AccountModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var uuid: Swift.String {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-extension Swift.Encodable {
-  public var jsonString: Swift.String? {
-    get
-  }
-  public var jsonObject: Any? {
-    get
-  }
-}
-extension Swift.Decodable {
-  @inline(__always) public static func decodeJSON(from string: Swift.String?, designatedPath: Swift.String? = nil) -> Self?
-  @inline(__always) public static func decodeJSON(from jsonObject: Any?, designatedPath: Swift.String? = nil) -> Self?
-  @inline(__always) public static func decodeJSON(from data: Foundation.Data?, designatedPath: Swift.String? = nil) -> Self?
-}
-extension Swift.Array where Element : Swift.Decodable, Element : Swift.Encodable {
-  public static func decodeJSON(from jsonString: Swift.String?, designatedPath: Swift.String? = nil) -> [Element]?
-  public static func decodeJSON(from array: [Any]?) -> [Element]?
-}
-public struct Go23WalletChainModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var chainId: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var walletAddress: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.False public var hasDefault: Swift.Bool {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var imageUrl: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var rpc: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var symbol: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var middleContractAddress: Swift.String {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
-}
-public struct Go23TokenTransactionModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.False public var isLendingGas: Swift.Bool {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var transType: Swift.Int {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var platformBalance: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.ZeroDouble public var platformBalanceSort: Swift.Double {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.ZeroDouble public var platformUPer: Swift.Double {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var tokenBalance: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.ZeroDouble public var tokenBalanceSort: Swift.Double {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.ZeroDouble public var tokenUPer: Swift.Double {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var gas: Swift.String {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.ZeroDouble public var fee: Swift.Double {
-    get
-    set
-    _modify
-  }
-  @Go23WalletSDK.DecodableDefault.Zero public var decimal: Swift.Int {
-    get
-    set
-    _modify
-  }
-  public func encode(to encoder: Swift.Encoder) throws
-  public init(from decoder: Swift.Decoder) throws
+extension Go23WalletSDK.BigInt : Swift.Strideable {
+  public typealias Stride = Go23WalletSDK.BigInt
+  public func advanced(by n: Go23WalletSDK.BigInt.Stride) -> Go23WalletSDK.BigInt
+  public func distance(to other: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt.Stride
 }
 extension Go23WalletSDK.Go23WalletSDK {
-  public func addChain(with address: Swift.Int, chainId: Swift.Int, completion: @escaping ((Any?) -> Swift.Void))
-  public func removeChain(with address: Swift.String, chainId: Swift.Int, completion: @escaping ((Any?) -> Swift.Void))
-  public func setCurrentChain(with address: Swift.String, chainId: Swift.Int, completion: @escaping ((Any?) -> Swift.Void))
-  public func fetchWalletChainlist(with address: Swift.String, pageSize: Swift.Int, pageNumber: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23WalletChainListModel?) -> Swift.Void))
-  public func getChainTokenBalance(with address: Swift.String, chainId: Swift.Int, completion: @escaping ((Go23WalletSDK.Go23TokenBalanceModel?) -> Swift.Void))
+  public func connect(with uniqueId: Swift.String, email: Swift.String, phone: Swift.String = "", completion: @escaping ((Go23WalletSDK.Go23AccountResult) -> Swift.Void))
 }
-public struct Go23WalletInfoModel : Swift.Codable {
-  @Go23WalletSDK.DecodableDefault.EmptyString public var name: Swift.String {
-    get
-    set
-    _modify
+extension Go23WalletSDK.BigUInt {
+  public mutating func multiply(byWord y: Go23WalletSDK.BigUInt.Word)
+  public func multiplied(byWord y: Go23WalletSDK.BigUInt.Word) -> Go23WalletSDK.BigUInt
+  public mutating func multiplyAndAdd(_ x: Go23WalletSDK.BigUInt, _ y: Go23WalletSDK.BigUInt.Word, shiftedBy shift: Swift.Int = 0)
+  public func multiplied(by y: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public static var directMultiplicationLimit: Swift.Int
+  public static func * (x: Go23WalletSDK.BigUInt, y: Go23WalletSDK.BigUInt) -> Go23WalletSDK.BigUInt
+  public static func *= (a: inout Go23WalletSDK.BigUInt, b: Go23WalletSDK.BigUInt)
+}
+extension Go23WalletSDK.BigInt {
+  public static func * (a: Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt) -> Go23WalletSDK.BigInt
+  public static func *= (a: inout Go23WalletSDK.BigInt, b: Go23WalletSDK.BigInt)
+}
+extension Foundation.NSNotification.Name {
+  public struct Task {
+    public static let DidResume: Foundation.Notification.Name
+    public static let DidSuspend: Foundation.Notification.Name
+    public static let DidCancel: Foundation.Notification.Name
+    public static let DidComplete: Foundation.Notification.Name
   }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var address: Swift.String {
-    get
-    set
-    _modify
+}
+extension Foundation.Notification {
+  public struct Key {
+    public static let Task: Swift.String
+    public static let ResponseData: Swift.String
   }
-  @Go23WalletSDK.DecodableDefault.EmptyString public var avatar: Swift.String {
-    get
-    set
-    _modify
+}
+public protocol DecodableDefaultSource {
+  associatedtype Value : Swift.Decodable
+  static var defaultValue: Self.Value { get }
+}
+public enum DecodableDefault {
+}
+extension Go23WalletSDK.DecodableDefault {
+  @propertyWrapper public struct Wrapper<Source> where Source : Go23WalletSDK.DecodableDefaultSource {
+    public typealias Value = Source.Value
+    public var wrappedValue: Source.Value
+    public init(wrappedValue: Go23WalletSDK.DecodableDefault.Wrapper<Source>.Value)
   }
-  public func encode(to encoder: Swift.Encoder) throws
+}
+extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Decodable {
   public init(from decoder: Swift.Decoder) throws
 }
-extension Go23WalletSDK.Go23WalletError : Swift.Equatable {}
-extension Go23WalletSDK.Go23WalletError : Swift.Hashable {}
-extension Go23WalletSDK.Go23TransactionError : Swift.Equatable {}
-extension Go23WalletSDK.Go23TransactionError : Swift.Hashable {}
-extension Go23WalletSDK.Go23NFTError : Swift.Equatable {}
-extension Go23WalletSDK.Go23NFTError : Swift.Hashable {}
+extension Swift.KeyedDecodingContainer {
+  public func decode<T>(_ type: Go23WalletSDK.DecodableDefault.Wrapper<T>.Type, forKey key: Swift.KeyedDecodingContainer<K>.Key) throws -> Go23WalletSDK.DecodableDefault.Wrapper<T> where T : Go23WalletSDK.DecodableDefaultSource
+}
+extension Go23WalletSDK.DecodableDefault {
+  public typealias Source = Go23WalletSDK.DecodableDefaultSource
+  public typealias List = Swift.Decodable & Swift.ExpressibleByArrayLiteral
+  public typealias Map = Swift.Decodable & Swift.ExpressibleByDictionaryLiteral
+  public enum Sources {
+    public enum True : Go23WalletSDK.DecodableDefault.Source {
+      public static var defaultValue: Swift.Bool {
+        get
+      }
+      public typealias Value = Swift.Bool
+    }
+    public enum False : Go23WalletSDK.DecodableDefault.Source {
+      public static var defaultValue: Swift.Bool {
+        get
+      }
+      public typealias Value = Swift.Bool
+    }
+    public enum EmptyString : Go23WalletSDK.DecodableDefault.Source {
+      public static var defaultValue: Swift.String {
+        get
+      }
+      public typealias Value = Swift.String
+    }
+    public enum EmptyList<T> : Go23WalletSDK.DecodableDefault.Source where T : Swift.Decodable, T : Swift.ExpressibleByArrayLiteral {
+      public static var defaultValue: T {
+        get
+      }
+      public typealias Value = T
+    }
+    public enum EmptyMap<T> : Go23WalletSDK.DecodableDefault.Source where T : Swift.Decodable, T : Swift.ExpressibleByDictionaryLiteral {
+      public static var defaultValue: T {
+        get
+      }
+      public typealias Value = T
+    }
+    public enum Zero : Go23WalletSDK.DecodableDefault.Source {
+      public static var defaultValue: Swift.Int {
+        get
+      }
+      public typealias Value = Swift.Int
+    }
+    public enum ZeroDouble : Go23WalletSDK.DecodableDefault.Source {
+      public static var defaultValue: Swift.Double {
+        get
+      }
+      public typealias Value = Swift.Double
+    }
+  }
+}
+extension Go23WalletSDK.DecodableDefault {
+  public typealias True = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.True>
+  public typealias False = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.False>
+  public typealias EmptyString = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.EmptyString>
+  public typealias EmptyList<T> = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.EmptyList<T>> where T : Swift.Decodable, T : Swift.ExpressibleByArrayLiteral
+  public typealias EmptyMap<T> = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.EmptyMap<T>> where T : Swift.Decodable, T : Swift.ExpressibleByDictionaryLiteral
+  public typealias Zero = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.Zero>
+  public typealias ZeroDouble = Go23WalletSDK.DecodableDefault.Wrapper<Go23WalletSDK.DecodableDefault.Sources.ZeroDouble>
+}
+extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Equatable where Source.Value : Swift.Equatable {
+  public static func == (a: Go23WalletSDK.DecodableDefault.Wrapper<Source>, b: Go23WalletSDK.DecodableDefault.Wrapper<Source>) -> Swift.Bool
+}
+extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Hashable where Source.Value : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension Go23WalletSDK.DecodableDefault.Wrapper : Swift.Encodable where Source.Value : Swift.Encodable {
+  public func encode(to encoder: Swift.Encoder) throws
+}
+extension Go23WalletSDK.NetworkReachabilityManager.ConnectionType : Swift.Equatable {}
+extension Go23WalletSDK.NetworkReachabilityManager.ConnectionType : Swift.Hashable {}
 extension Go23WalletSDK.Go23ActivityFilterType : Swift.Equatable {}
 extension Go23WalletSDK.Go23ActivityFilterType : Swift.Hashable {}
 extension Go23WalletSDK.Go23ActivityFilterType : Swift.RawRepresentable {}
+extension Go23WalletSDK.BigInt.Sign : Swift.Equatable {}
+extension Go23WalletSDK.BigInt.Sign : Swift.Hashable {}
+extension Go23WalletSDK.HTTPMethod : Swift.Equatable {}
+extension Go23WalletSDK.HTTPMethod : Swift.Hashable {}
+extension Go23WalletSDK.HTTPMethod : Swift.RawRepresentable {}
+extension Go23WalletSDK.URLEncoding.Destination : Swift.Equatable {}
+extension Go23WalletSDK.URLEncoding.Destination : Swift.Hashable {}
+extension Go23WalletSDK.URLEncoding.ArrayEncoding : Swift.Equatable {}
+extension Go23WalletSDK.URLEncoding.ArrayEncoding : Swift.Hashable {}
+extension Go23WalletSDK.URLEncoding.BoolEncoding : Swift.Equatable {}
+extension Go23WalletSDK.URLEncoding.BoolEncoding : Swift.Hashable {}
 extension Go23WalletSDK.Go23AnimationType : Swift.Equatable {}
 extension Go23WalletSDK.Go23AnimationType : Swift.Hashable {}
 extension Go23WalletSDK.Go23AnimatedIcon : Swift.Equatable {}

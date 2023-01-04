@@ -1,6 +1,6 @@
 //
 //  Go23SDKChain.swift
-//  demo
+//  Go23WalletSDK
 //
 //  Created by Taran on 2022/12/20.
 //
@@ -9,6 +9,24 @@ import UIKit
 
 // MARK: Chain
 extension Go23WalletSDK {
+    
+    public func fetchWalletChainlist(with address: String,
+                                     pageSize: Int,
+                                     pageNumber: Int,
+                                     completion: @escaping ((Go23WalletChainListModel?) -> Void)) {
+        Go23SDKManager.shared.fetchWalletChainlist(with: address,
+                                                   pageSize: pageSize,
+                                                   pageNumber: pageNumber,
+                                                   completion: completion)
+    }
+    
+    public func getChainTokenBalance(with address: String,
+                                chainId: Int,
+                                completion: @escaping ((Go23TokenBalanceModel?) -> Void)) {
+        Go23SDKManager.shared.getChainTokenBalance(with: address,
+                                                   chainId: chainId,
+                                                   completion: completion)
+    }
     
     public func addChain(with address: Int,
                          chainId: Int,
@@ -32,23 +50,5 @@ extension Go23WalletSDK {
         Go23SDKManager.shared.setCurrentChain(with: address,
                                               chainId: chainId,
                                               completion: completion)
-    }
-    
-    public func fetchWalletChainlist(with address: String,
-                                     pageSize: Int,
-                                     pageNumber: Int,
-                                     completion: @escaping ((Go23WalletChainListModel?) -> Void)) {
-        Go23SDKManager.shared.fetchWalletChainlist(with: address,
-                                                   pageSize: pageSize,
-                                                   pageNumber: pageNumber,
-                                                   completion: completion)
-    }
-    
-    public func getChainTokenBalance(with address: String,
-                                chainId: Int,
-                                completion: @escaping ((Go23TokenBalanceModel?) -> Void)) {
-        Go23SDKManager.shared.getChainTokenBalance(with: address,
-                                                   chainId: chainId,
-                                                   completion: completion)
     }
 }

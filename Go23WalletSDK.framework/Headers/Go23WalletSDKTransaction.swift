@@ -1,12 +1,13 @@
 //
 //  Go23WalletSDKTransaction.swift
-//  demo
+//  Go23WalletSDK
 //
 //  Created by Taran on 2022/12/20.
 //
 
 import UIKit
 
+// MARK: Transaction
 extension Go23WalletSDK {
     
     public func sendTransaction(with model: Go23SendTransactionModel,

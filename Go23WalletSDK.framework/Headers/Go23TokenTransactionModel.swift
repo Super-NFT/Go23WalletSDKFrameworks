@@ -1,6 +1,6 @@
 //
 //  Go23TokenTransactionModel.swift
-//  demo
+//  Go23WalletSDK
 //
 //  Created by Taran on 2022/12/25.
 //
@@ -9,11 +9,11 @@ public struct Go23TokenTransactionModel: Codable {
     @DecodableDefault.False       public var isLendingGas: Bool
     @DecodableDefault.Zero        public var transType: Int
     @DecodableDefault.EmptyString public var platformBalance: String
-    @DecodableDefault.ZeroDouble  public var platformBalanceSort: Double
-    @DecodableDefault.ZeroDouble  public var platformUPer: Double
+    @DecodableDefault.EmptyString public var platformBalanceSort: String
+    @DecodableDefault.EmptyString public var platformUPer: String
     @DecodableDefault.EmptyString public var tokenBalance: String
-    @DecodableDefault.ZeroDouble  public var tokenBalanceSort: Double
-    @DecodableDefault.ZeroDouble  public var tokenUPer: Double
+    @DecodableDefault.EmptyString public var tokenBalanceSort: String
+    @DecodableDefault.EmptyString public var tokenUPer: String
     @DecodableDefault.EmptyString public var gas: String
     @DecodableDefault.ZeroDouble  public var fee: Double
     @DecodableDefault.Zero        public var decimal: Int

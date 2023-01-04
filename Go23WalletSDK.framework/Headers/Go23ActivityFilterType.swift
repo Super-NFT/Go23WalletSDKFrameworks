@@ -1,6 +1,6 @@
 //
 //  Go23ActivityFilterType.swift
-//  Go23SDKCode
+//  Go23WalletSDK
 //
 //  Created by Taran on 2023/1/2.
 //

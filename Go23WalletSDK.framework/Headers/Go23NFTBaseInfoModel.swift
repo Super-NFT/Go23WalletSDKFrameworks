@@ -1,6 +1,6 @@
 //
 //  Go23NFTBaseInfoModel.swift
-//  demo
+//  Go23WalletSDK
 //
 //  Created by Taran on 2022/12/25.
 //

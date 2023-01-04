@@ -1,6 +1,6 @@
 //
 //  Go23WalletNFTModel.swift
-//  Go23SDKCode
+//  Go23WalletSDK
 //
 //  Created by Taran on 2023/1/2.
 //
@@ -22,7 +22,7 @@ public struct Go23WalletNFTModel: Codable {
         case walletAddress = "user_wallet_address"
         case contractAddress = "contract_address"
         case chainId = "chain_id"
-        case chainName = "chain_name"
+        case chainName = "block_chain_name"
         case externalUrl = "external_url"
         case name
         case image
