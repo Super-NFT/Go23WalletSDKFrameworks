@@ -51,10 +51,10 @@ extension Go23WalletSDK {
     }
     
     public func checkToken(with address: String,
-                           chainid: Int,
+                           chainId: Int,
                            completion: @escaping ((Go23ChainTokenInfoModel?) -> Void)) {
         Go23SDKManager.shared.checkToken(with: address,
-                                         chainid: chainid,
+                                         chainId: chainId,
                                          completion: completion)
     }
     

@@ -10,18 +10,6 @@ import UIKit
 // MARK: NFT
 extension Go23WalletSDK {
     
-    public func getNftList(with walletAddress: String,
-                           chainId: Int,
-                           pageSize: Int,
-                           pageNumber: Int,
-                           completion: @escaping ((Go23WalletNFTListModel?) -> Void)) {
-        Go23SDKManager.shared.getNftList(with: walletAddress,
-                                         chainId: chainId,
-                                         pageSize: pageSize,
-                                         pageNumber: pageNumber,
-                                         completion: completion)
-    }
-    
     public func getNftDetail(for nftid: String,
                           contractAddress: String,
                           walletAddress: String,
@@ -32,6 +20,18 @@ extension Go23WalletSDK {
                                            walletAddress: walletAddress,
                                            chainId: chainId,
                                            completion: completion)
+    }
+
+    public func getNftList(with walletAddress: String,
+                           chainId: Int,
+                           pageSize: Int,
+                           pageNumber: Int,
+                           completion: @escaping ((Go23WalletNFTListModel?) -> Void)) {
+        Go23SDKManager.shared.getNftList(with: walletAddress,
+                                         chainId: chainId,
+                                         pageSize: pageSize,
+                                         pageNumber: pageNumber,
+                                         completion: completion)
     }
     
     public func addNFT(with contractAddress: String,

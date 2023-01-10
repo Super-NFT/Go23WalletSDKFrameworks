@@ -16,7 +16,7 @@ public struct Go23NFTDetailModel: Codable {
     @DecodableDefault.EmptyString public var image: String
     @DecodableDefault.EmptyString public var animationUrl: String
     @DecodableDefault.EmptyString public var desc: String
-    @DecodableDefault.EmptyList   public var attributes: [NFTAttribute]
+    @DecodableDefault.EmptyList   public var attributes: [Go23NFTAttribute]
     @DecodableDefault.EmptyString public var series: String
     
     enum CodingKeys: String, CodingKey {
@@ -32,15 +32,5 @@ public struct Go23NFTDetailModel: Codable {
         case desc = "description"
         case attributes
         case series
-    }
-}
-
-public struct NFTAttribute: Codable{
-    var traitType: String
-    var value: String
-    
-    enum CodingKeys: String, CodingKey {
-        case traitType = "trait_type"
-        case value
     }
 }

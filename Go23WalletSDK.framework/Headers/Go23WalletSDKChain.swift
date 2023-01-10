@@ -10,6 +10,30 @@ import UIKit
 // MARK: Chain
 extension Go23WalletSDK {
     
+    public func addChain(with address: String,
+                         chainId: Int,
+                         completion: @escaping ((Go23AddChainResult) -> Void)) {
+        Go23SDKManager.shared.addChain(with: address,
+                                       chainId: chainId,
+                                       completion: completion)
+    }
+
+    public func removeChain(with address: String,
+                            chainId: Int,
+                            completion: @escaping ((Go23RemoveChainResult) -> Void)) {
+        Go23SDKManager.shared.removeChain(with: address,
+                                          chainId: chainId,
+                                          completion: completion)
+    }
+    
+    public func setCurrentChain(with address: String,
+                                chainId: Int,
+                                completion: @escaping ((Go23SetCurrentChainResult) -> Void)) {
+        Go23SDKManager.shared.setCurrentChain(with: address,
+                                              chainId: chainId,
+                                              completion: completion)
+    }
+    
     public func fetchWalletChainlist(with address: String,
                                      pageSize: Int,
                                      pageNumber: Int,
@@ -21,34 +45,10 @@ extension Go23WalletSDK {
     }
     
     public func getChainTokenBalance(with address: String,
-                                chainId: Int,
-                                completion: @escaping ((Go23TokenBalanceModel?) -> Void)) {
+                                     chainId: Int,
+                                     completion: @escaping ((Go23TokenBalanceModel?) -> Void)) {
         Go23SDKManager.shared.getChainTokenBalance(with: address,
                                                    chainId: chainId,
                                                    completion: completion)
-    }
-    
-    public func addChain(with address: Int,
-                         chainId: Int,
-                         completion: @escaping ((Any?) -> Void)) {
-        Go23SDKManager.shared.addChain(with: address,
-                                       chainId: chainId,
-                                       completion: completion)
-    }
-
-    public func removeChain(with address: String,
-                            chainId: Int,
-                            completion: @escaping ((Any?) -> Void)) {
-        Go23SDKManager.shared.removeChain(with: address,
-                                          chainId: chainId,
-                                          completion: completion)
-    }
-    
-    public func setCurrentChain(with address: String,
-                                chainId: Int,
-                                completion: @escaping ((Any?) -> Void)) {
-        Go23SDKManager.shared.setCurrentChain(with: address,
-                                              chainId: chainId,
-                                              completion: completion)
     }
 }

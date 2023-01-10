@@ -23,10 +23,10 @@ public class Go23WalletSDK: NSObject {
         return self
     }
     
-    public static func auth(appkey: String,
+    public static func auth(appKey: String,
                             secretKey: String,
                             completion: @escaping ((Bool) -> Void)) {
-        Go23SDKManager.auth(appkey: appkey,
+        Go23SDKManager.auth(appKey: appKey,
                             secretKey: secretKey) { (result, message) in
                             if result {
                                 shared = Go23WalletSDK()
@@ -41,8 +41,8 @@ public class Go23WalletSDK: NSObject {
 // MARK: Wallet
 extension Go23WalletSDK {
     
-    public func fetchUserWallet(completion: @escaping ((Go23AccountResult) -> Void)) {
-        Go23SDKManager.shared.fetchUserWallet(completion: completion)
+    public func fetchUserWallets(completion: @escaping ((Go23WalletListResult) -> Void)) {
+        Go23SDKManager.shared.fetchUserWallets(completion: completion)
     }
 }
 
@@ -59,29 +59,36 @@ extension Go23WalletSDK {
 // MARK: Reshard and Resore
 extension Go23WalletSDK {
     
+    // Verify code only used to user forget passowrd reshard.
     public func reshardWallet(with address: String,
                               shard: String,
+                              delegate: Go23ReshardDelegate?,
                               completion: @escaping ((Go23ReshardResult) -> Void)) {
         Go23SDKManager.shared.reshardWallet(with: address,
                                             shard: shard,
+                                            delegate: delegate,
                                             completion: completion)
     }
     
     public func forgetShardPincode(with address: String,
                                    shard: String,
                                    verifyCode code: String,
+                                   delegate: Go23ReshardDelegate?,
                                    completion: @escaping ((Go23ReshardResult) -> Void)) {
         Go23SDKManager.shared.forgetShardPincode(with: address,
                                                  shard: shard,
                                                  verifyCode: code,
+                                                 delegate: delegate,
                                                  completion: completion)
     }
     
     public func restoreWallet(with addr: String,
                               verifyCode code: String,
-                              completion: @escaping ((Go23RecoverResult) -> Void)) {
+                              delegate: Go23RestoreDelegate?,
+                              completion: @escaping ((Go23RestoreResult) -> Void)) {
         Go23SDKManager.shared.restoreWallet(with: addr,
                                             verifyCode: code,
+                                            delegate: delegate,
                                             completion: completion)
     }
 }
